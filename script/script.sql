@@ -19,7 +19,7 @@ CREATE TABLE refund_db.users (
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   password TEXT NOT NULL,
-  image_perfil BYTEA,
+  image BYTEA,
   id_role INTEGER NOT NULL,
 
   PRIMARY KEY (id_user),
