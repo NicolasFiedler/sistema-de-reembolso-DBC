@@ -33,14 +33,14 @@ CREATE TABLE refund_db.users (
 -- Table refund_db.refund
 -- -----------------------------------------------------
 CREATE TABLE refund_db.refund (
-  id_refound SERIAL,
+  id_refund SERIAL,
   title TEXT NOT NULL,
   date DATE NOT NULL,
   value NUMERIC(9, 2) NOT NULL,
   status NUMERIC NOT NULL,
   id_user INTEGER NOT NULL,
 
-  PRIMARY KEY (id_refound),
+  PRIMARY KEY (id_refund),
   CONSTRAINT fk_refund_users
     FOREIGN KEY (id_user)
     REFERENCES refund_db.users (id_user)
@@ -56,12 +56,12 @@ CREATE TABLE refund_db.item (
   date DATE NOT NULL,
   value NUMERIC(9, 2) NOT NULL,
   attachment BYTEA NOT NULL,
-  id_refound INTEGER NOT NULL,
+  id_refund INTEGER NOT NULL,
 
   PRIMARY KEY (id_item),
   CONSTRAINT fk_item_refund
-    FOREIGN KEY (id_refound)
-    REFERENCES refund_db.refund (id_refound)
+    FOREIGN KEY (id_refund)
+    REFERENCES refund_db.refund (id_refund)
 );
 
 -- -----------------------------------------------------
