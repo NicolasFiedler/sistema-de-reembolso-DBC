@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Refund {
-    private Integer idRefund;
-    private String title;
+public class RoleEntity {
+    private Integer idRole;
+    private String role;
 }
