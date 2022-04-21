@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,7 +23,7 @@ public class UserService {
     private final ObjectMapper objectMapper;
 
 
-    public UserDTO save(UserCreateDTO userCreate, MultipartFile file) throws Exception{
+    public UserDTO save(UserCreateDTO userCreate, MultipartFile file) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
         userCreate.setImage(file.getBytes());
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
@@ -31,7 +32,7 @@ public class UserService {
         return userDTO;
     }
 
-    public List<UserDTO> list(){
+    public List<UserDTO> list() {
         log.info("Chamada de método:: LIST USER!");
         return userRepository.findAll().stream()
                 .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class))
@@ -39,32 +40,36 @@ public class UserService {
     }
 
 
-    public UserDTO update(Integer id, UserCreateDTO userAtt) throws Exception{
+    public UserDTO update(Integer id, UserCreateDTO userAtt) throws Exception {
         log.info("Chamada de método:: LIST USER!");
         UserEntity userFound = userRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("User not found!"));
+                .orElseThrow(() -> new RuntimeException("User not found!"));
         userFound.setImage(userAtt.getImage());
         userFound.setEmail(userAtt.getEmail());
         userFound.setName(userAtt.getName());
         userFound.setPassword(userAtt.getPassword());
         UserEntity userEntityAtt = userRepository.save(userFound);
         UserDTO userDTO = objectMapper.convertValue(userEntityAtt, UserDTO.class);
-                return userDTO;
-    }
-
-
-    public UserDTO delete(Integer id)throws Exception{
-        log.info("Chamada de método:: DELETE USER!");
-        UserEntity userFound = userRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("User not found!"));
-        userRepository.delete(userFound);
-        UserDTO userDTO = objectMapper.convertValue(userFound,UserDTO.class);
         return userDTO;
     }
 
-    public List<UserDTO> findByNameContainingIgnoreCase(String name)throws Exception{
+
+    public UserDTO delete(Integer id) throws Exception {
+        log.info("Chamada de método:: DELETE USER!");
+        UserEntity userFound = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found!"));
+        userRepository.delete(userFound);
+        UserDTO userDTO = objectMapper.convertValue(userFound, UserDTO.class);
+        return userDTO;
+    }
+
+    public List<UserDTO> findByNameContainingIgnoreCase(String name) throws Exception {
         return userRepository.findByNameContainingIgnoreCase(name).stream()
-                .map(userEntity -> objectMapper.convertValue(userEntity,UserDTO.class))
+                .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class))
                 .collect(Collectors.toList());
     }
+
+   public Optional<UserEntity> findByEmail (String email){
+        return userRepository.findByEmail(email);
+   }
 }

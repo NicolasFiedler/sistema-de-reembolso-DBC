@@ -27,7 +27,7 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping("/createRefund")
-    public RefundDTO create(@RequestBody RefundCreateDTO refundCreate){
+    public RefundDTO create(@RequestBody RefundCreateDTO refundCreate) {
         return refundService.create(refundCreate);
     }
 
@@ -38,7 +38,7 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @GetMapping("/listAllRefunds")
-    public List<RefundDTO> list(){
+    public List<RefundDTO> list() {
         return refundService.list();
     }
 
@@ -49,7 +49,7 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PutMapping("/updateRefund")
-    public RefundDTO update(@PathVariable Integer id, RefundCreateDTO refundAtt)throws Exception{
+    public RefundDTO update(@PathVariable Integer id, RefundCreateDTO refundAtt) throws Exception {
         return refundService.update(id, refundAtt);
     }
 
@@ -60,7 +60,7 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @DeleteMapping("/deleteRefund")
-    public RefundDTO delete(@PathVariable Integer id) throws Exception{
+    public RefundDTO delete(@PathVariable Integer id) throws Exception {
         return refundService.delete(id);
     }
 

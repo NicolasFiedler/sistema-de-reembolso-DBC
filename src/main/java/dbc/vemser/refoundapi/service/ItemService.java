@@ -24,16 +24,16 @@ public class ItemService {
     public ItemDTO create(ItemCreateDTO itemCreate, MultipartFile file) throws Exception {
         log.info("Chamada de método:: CREATE ITEM!");
         itemCreate.setImage(file.getBytes());
-        ItemEntity itemEntity = objectMapper.convertValue(itemCreate,ItemEntity.class);
+        ItemEntity itemEntity = objectMapper.convertValue(itemCreate, ItemEntity.class);
         ItemEntity itemCreated = itemRepository.save(itemEntity);
-        ItemDTO itemDTO = objectMapper.convertValue(itemCreated,ItemDTO.class);
+        ItemDTO itemDTO = objectMapper.convertValue(itemCreated, ItemDTO.class);
         return itemDTO;
     }
 
-    public ItemDTO update(Integer id, ItemCreateDTO itemAtt){
+    public ItemDTO update(Integer id, ItemCreateDTO itemAtt) {
         log.info("Chamada de método:: UPDATE ITEM!");
         ItemEntity itemFound = itemRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Item not found!"));
+                .orElseThrow(() -> new RuntimeException("Item not found!"));
         itemFound.setImage(itemAtt.getImage());
         itemFound.setName(itemAtt.getName());
         itemFound.setDate(itemAtt.getDate());
@@ -43,17 +43,17 @@ public class ItemService {
         return itemDTO;
     }
 
-    public ItemDTO list(){
+    public ItemDTO list() {
         log.info("Chamada de método:: LIST ITEM!");
         return (ItemDTO) itemRepository.findAll().stream()
                 .map(itemEntity -> objectMapper.convertValue(itemEntity, ItemDTO.class))
                 .collect(Collectors.toList());
     }
 
-    public ItemDTO delete(Integer id){
+    public ItemDTO delete(Integer id) {
         log.info("Chamada de método:: DELETE ITEM!");
         ItemEntity itemFound = itemRepository.findById(id)
-                .orElseThrow(()->new RuntimeException("Item not found!"));
+                .orElseThrow(() -> new RuntimeException("Item not found!"));
         itemRepository.delete(itemFound);
         ItemDTO itemDTO = objectMapper.convertValue(itemFound, ItemDTO.class);
         return itemDTO;

@@ -29,7 +29,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping("/saveUser")
-    public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate,@RequestParam(value = "file", required = false) MultipartFile file) throws Exception{
+    public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
         return userService.save(userCreate, file);
     }
 
@@ -40,7 +40,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @GetMapping("/listAllUser")
-    public List<UserDTO> list(){
+    public List<UserDTO> list() {
         return userService.list();
     }
 
@@ -51,8 +51,8 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PutMapping("/updateUser")
-    public UserDTO update(@RequestParam Integer id,@Valid @RequestBody UserCreateDTO userAtt) throws Exception{
-        return userService.update(id,userAtt);
+    public UserDTO update(@RequestParam Integer id, @Valid @RequestBody UserCreateDTO userAtt) throws Exception {
+        return userService.update(id, userAtt);
     }
 
     @ApiOperation(value = "Retorna um usuario deletado")
@@ -62,7 +62,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @DeleteMapping("/deleteUser")
-    public UserDTO delete(@RequestParam Integer id)throws Exception{
+    public UserDTO delete(@RequestParam Integer id) throws Exception {
         return userService.delete(id);
     }
 
@@ -73,7 +73,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @GetMapping("/findUserByName")
-    public List<UserDTO> findByNameContainingIgnoreCase(String name)throws Exception{
+    public List<UserDTO> findByNameContainingIgnoreCase(String name) throws Exception {
         return userService.findByNameContainingIgnoreCase(name);
     }
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class ItemCreateDTO {
     @NotEmpty
-    @Size(min = 2, max = 60 , message = "o nome deve conter entre 2 a 60 caracteres")
+    @Size(min = 2, max = 60, message = "o nome deve conter entre 2 a 60 caracteres")
     private String name;
 
     private LocalDateTime date;

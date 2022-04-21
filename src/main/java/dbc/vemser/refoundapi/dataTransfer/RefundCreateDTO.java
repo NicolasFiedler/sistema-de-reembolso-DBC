@@ -10,21 +10,16 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 public class RefundCreateDTO {
     @NotBlank
-    @Size(min = 2, max = 60 , message = "o titulo de reembolso deve conter entre 2 a 40 caracteres")
+    @Size(min = 2, max = 60, message = "o titulo de reembolso deve conter entre 2 a 40 caracteres")
     private String title;
-<<<<<<< HEAD
-    private LocalDateTime data;
-    @NotNull
-=======
-    private LocalDateTime date;
->>>>>>> 6aaaa953a4c83f0424b939cf29155fa9daca70c0
+
     private Status status;
     @NotNull
     @DecimalMin(value = "0.01", message = "Não é permitido números negativos.")
