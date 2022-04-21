@@ -20,14 +20,25 @@ CREATE TABLE refund_db.users (
   email TEXT NOT NULL,
   password TEXT NOT NULL,
   image BYTEA,
-  id_role INTEGER NOT NULL,
 
-  PRIMARY KEY (id_user),
-  CONSTRAINT fk_users_roles
-    FOREIGN KEY (id_role)
-    REFERENCES refund_db.roles (id_role)
+  PRIMARY KEY (id_user)
 );
 
+-- -----------------------------------------------------
+-- Table refund_db.users_roles
+-- -----------------------------------------------------
+CREATE TABLE refund_db.users_roles (
+  id_role INTEGER NOT NULL,
+  id_user INTEGER NOT NULL,
+
+  PRIMARY KEY (id_role, id_user),
+  CONSTRAINT fk_roles_has_users_role
+    FOREIGN KEY (id_role)
+    REFERENCES refund_db.roles (id_role),
+  CONSTRAINT fk_roles_has_users_users
+    FOREIGN KEY (id_user)
+    REFERENCES refund_db.users (id_user)
+);
 
 -- -----------------------------------------------------
 -- Table refund_db.refund
@@ -75,37 +86,49 @@ INSERT INTO refund_db.roles (role) VALUES ('ROLE_COLABORADOR');
 -- -----------------------------------------------------
 -- Insert refund_db.users              =Bcrypt=
 -- -----------------------------------------------------
--- INSERT INTO refund_db.users (name, email, password, id_role) --password: admin
--- VALUES ('admin', 'admin', '$2a$12$R7zbqGcvuqVhvMKsQqQAXOH.goaNseEInEF2NwmuVM5acRzlQZLJO', 1);
+INSERT INTO refund_db.users (name, email, password) --password: admin
+VALUES ('admin', 'admin', '$2a$12$R7zbqGcvuqVhvMKsQqQAXOH.goaNseEInEF2NwmuVM5acRzlQZLJO');
 
--- INSERT INTO refund_db.users (name, email, password, id_role) --password: financeiro
--- VALUES ('jonas', 'financeiro@dbccompany.com.br', '$2a$12$AANgLSu/127rSwlsodfrh.ZOL61Yzeg6c0wvtFs8n2oy3yLR7DAnO', 2);
+INSERT INTO refund_db.users (name, email, password) --password: financeiro
+VALUES ('jonas', 'financeiro@dbccompany.com.br', '$2a$12$AANgLSu/127rSwlsodfrh.ZOL61Yzeg6c0wvtFs8n2oy3yLR7DAnO');
 
--- INSERT INTO refund_db.users (name, email, password, id_role) --password: gestor
--- VALUES ('jaqueline', 'gestor@dbccompany.com.br', '$2a$12$Yx5jlNcOfLeWG3MMNdDfquM9wN4ShEgHFdYjP/Rdiw3ZHXW/T9zl6', 3);
+INSERT INTO refund_db.users (name, email, password) --password: gestor
+VALUES ('jaqueline', 'gestor@dbccompany.com.br', '$2a$12$Yx5jlNcOfLeWG3MMNdDfquM9wN4ShEgHFdYjP/Rdiw3ZHXW/T9zl6');
 
--- INSERT INTO refund_db.users (name, email, password, id_role) --password: 123
--- VALUES ('marcos', 'marcos.alves@dbccompany.com.br', '$2a$12$U.0QlYm2JSuWAt.C4.nP.O3Oy9qgFHYW7BIvfplH2Hz61z1DE1iJO', 4);
+INSERT INTO refund_db.users (name, email, password) --password: 123
+VALUES ('marcos', 'marcos.alves@dbccompany.com.br', '$2a$12$U.0QlYm2JSuWAt.C4.nP.O3Oy9qgFHYW7BIvfplH2Hz61z1DE1iJO');
 
 -- -----------------------------------------------------
 -- Insert refund_db.users            =noBcritp=
 -- -----------------------------------------------------
-INSERT INTO refund_db.users (name, email, password, id_role)
-VALUES ('admin', 'admin', 'admin', 1);
+-- INSERT INTO refund_db.users (name, email, password)
+-- VALUES ('admin', 'admin', 'admin');
 
-INSERT INTO refund_db.users (name, email, password, id_role)
-VALUES ('jonas', 'financeiro@dbccompany.com.br', 'financeiro', 2);
+-- INSERT INTO refund_db.users (name, email, password)
+-- VALUES ('jonas', 'financeiro@dbccompany.com.br', 'financeiro');
 
-INSERT INTO refund_db.users (name, email, password, id_role)
-VALUES ('jaqueline', 'gestor@dbccompany.com.br', 'gestor', 3);
+-- INSERT INTO refund_db.users (name, email, password)
+-- VALUES ('jaqueline', 'gestor@dbccompany.com.br', 'gestor');
 
-INSERT INTO refund_db.users (name, email, password, id_role)
-VALUES ('marcos', 'marcos.alves@dbccompany.com.br', '123', 4);
+-- INSERT INTO refund_db.users (name, email, password)
+-- VALUES ('marcos', 'marcos.alves@dbccompany.com.br', '123');
 
 -- -----------------------------------------------------
 -- Insert refund_db.refund
 -- -----------------------------------------------------
 
+
+-- -----------------------------------------------------
+-- Insert refund_db.users_roles
+-- -----------------------------------------------------
+INSERT INTO refund_db.users_roles (id_user, id_role) --admin
+VALUES (1, 1);
+INSERT INTO refund_db.users_roles (id_user, id_role) --financeiro
+VALUES (2, 2);
+INSERT INTO refund_db.users_roles (id_user, id_role) --gestor
+VALUES (3, 3);
+INSERT INTO refund_db.users_roles (id_user, id_role) --colaborador
+VALUES (4, 4);
 
 -- -----------------------------------------------------
 -- Insert refund_db.item
