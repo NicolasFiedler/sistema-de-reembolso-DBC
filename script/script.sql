@@ -63,7 +63,7 @@ CREATE TABLE public.item (
 );
 
 -- -----------------------------------------------------
--- Table public.roles
+-- Insert public.roles
 -- -----------------------------------------------------
 INSERT INTO public.roles (role) VALUES ('ROLE_ADMIN');
 INSERT INTO public.roles (role) VALUES ('ROLE_FINANCEIRO');
@@ -71,26 +71,41 @@ INSERT INTO public.roles (role) VALUES ('ROLE_GESTOR');
 INSERT INTO public.roles (role) VALUES ('ROLE_COLABORADOR');
 
 -- -----------------------------------------------------
--- Table public.users
+-- Insert public.users              =Bcrypt=
 -- -----------------------------------------------------
-INSERT INTO public.users (name, email, password, id_role) --password: admin
-VALUES ('admin', 'admin', '$2a$12$R7zbqGcvuqVhvMKsQqQAXOH.goaNseEInEF2NwmuVM5acRzlQZLJO', 1);
+-- INSERT INTO public.users (name, email, password, id_role) --password: admin
+-- VALUES ('admin', 'admin', '$2a$12$R7zbqGcvuqVhvMKsQqQAXOH.goaNseEInEF2NwmuVM5acRzlQZLJO', 1);
 
-INSERT INTO public.users (name, email, password, id_role)--password: financeiro
-VALUES ('jonas', 'financeiro@dbccompany.com.br', '$2a$12$AANgLSu/127rSwlsodfrh.ZOL61Yzeg6c0wvtFs8n2oy3yLR7DAnO', 2);
+-- INSERT INTO public.users (name, email, password, id_role) --password: financeiro
+-- VALUES ('jonas', 'financeiro@dbccompany.com.br', '$2a$12$AANgLSu/127rSwlsodfrh.ZOL61Yzeg6c0wvtFs8n2oy3yLR7DAnO', 2);
 
-INSERT INTO public.users (name, email, password, id_role)--password: gestor
-VALUES ('jaqueline', 'gestor@dbccompany.com.br', '$2a$12$Yx5jlNcOfLeWG3MMNdDfquM9wN4ShEgHFdYjP/Rdiw3ZHXW/T9zl6', 3);
+-- INSERT INTO public.users (name, email, password, id_role) --password: gestor
+-- VALUES ('jaqueline', 'gestor@dbccompany.com.br', '$2a$12$Yx5jlNcOfLeWG3MMNdDfquM9wN4ShEgHFdYjP/Rdiw3ZHXW/T9zl6', 3);
 
-INSERT INTO public.users (name, email, password, id_role)--password: 123
-VALUES ('marcos', 'marcos.alves@dbccompany.com.br', '$2a$12$U.0QlYm2JSuWAt.C4.nP.O3Oy9qgFHYW7BIvfplH2Hz61z1DE1iJO', 4);
-
--- -----------------------------------------------------
--- Table public.refund
--- -----------------------------------------------------
-
+-- INSERT INTO public.users (name, email, password, id_role) --password: 123
+-- VALUES ('marcos', 'marcos.alves@dbccompany.com.br', '$2a$12$U.0QlYm2JSuWAt.C4.nP.O3Oy9qgFHYW7BIvfplH2Hz61z1DE1iJO', 4);
 
 -- -----------------------------------------------------
--- Table public.item
+-- Insert public.users            =noBcritp=
+-- -----------------------------------------------------
+INSERT INTO public.users (name, email, password, id_role)
+VALUES ('admin', 'admin', 'admin', 1);
+
+INSERT INTO public.users (name, email, password, id_role)
+VALUES ('jonas', 'financeiro@dbccompany.com.br', 'financeiro', 2);
+
+INSERT INTO public.users (name, email, password, id_role)
+VALUES ('jaqueline', 'gestor@dbccompany.com.br', 'gestor', 3);
+
+INSERT INTO public.users (name, email, password, id_role)
+VALUES ('marcos', 'marcos.alves@dbccompany.com.br', '123', 4);
+
+-- -----------------------------------------------------
+-- Insert public.refund
+-- -----------------------------------------------------
+
+
+-- -----------------------------------------------------
+-- Insert public.item
 -- -----------------------------------------------------
 
