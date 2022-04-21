@@ -1,14 +1,13 @@
 package dbc.vemser.refoundapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import javax.persistence.Id;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
+import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -33,4 +32,16 @@ public class UserEntity {
     @Lob
     @Column(name = "image")
     private byte[] image;
+
+    @Column(name = "id_role", insertable = false, updatable = false)
+    private Integer idRole;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_role", referencedColumnName = "id_role")
+    private RoleEntity roleEntity;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "userEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<RefundEntity> refundEntities;
 }

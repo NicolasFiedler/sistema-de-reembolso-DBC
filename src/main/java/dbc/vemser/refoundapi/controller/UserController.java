@@ -51,7 +51,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PutMapping("/updateUser")
-    public UserDTO update(@PathVariable Integer id,@Valid @RequestBody UserCreateDTO userAtt) throws Exception{
+    public UserDTO update(@RequestParam Integer id,@Valid @RequestBody UserCreateDTO userAtt) throws Exception{
         return userService.update(id,userAtt);
     }
 
@@ -62,7 +62,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @DeleteMapping("/deleteUser")
-    public UserDTO delete(@PathVariable Integer id)throws Exception{
+    public UserDTO delete(@RequestParam Integer id)throws Exception{
         return userService.delete(id);
     }
 

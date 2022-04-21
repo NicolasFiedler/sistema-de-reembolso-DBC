@@ -1,10 +1,12 @@
 package dbc.vemser.refoundapi.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dbc.vemser.refoundapi.enums.Status;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,4 +31,16 @@ public class RefundEntity {
 
     @Column(name = "value")
     private Double value;
+
+    @Column(name = "id_user", insertable = false, updatable = false)
+    private Integer idUser;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_user", referencedColumnName = "id_user")
+    private UserEntity userEntity;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "refundEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private Set<ItemEntity> itemEntities;
 }
