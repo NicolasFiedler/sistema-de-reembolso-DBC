@@ -5,8 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import java.io.Serializable;
 import java.util.Set;
 
 @Getter
@@ -14,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity(name = "roles")
-public class RoleEntity {
+public class RoleEntity implements Serializable, GrantedAuthority {
 
     @Id
     @Column(name = "id_role")
@@ -24,6 +29,11 @@ public class RoleEntity {
     private String role;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "roleEntity", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "roleEntities")
     private Set<UserEntity> userEntities;
+
+    @Override
+    public String getAuthority() {
+        return role;
+    }
 }
