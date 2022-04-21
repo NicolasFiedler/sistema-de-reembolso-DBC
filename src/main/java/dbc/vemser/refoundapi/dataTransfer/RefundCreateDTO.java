@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 public class RefundCreateDTO {
     private String title;
-    private LocalDateTime data;
+    private LocalDateTime date;
     private Status status;
     private Double value;
 }

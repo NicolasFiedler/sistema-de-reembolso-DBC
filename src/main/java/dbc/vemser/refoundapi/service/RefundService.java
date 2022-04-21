@@ -5,7 +5,6 @@ import dbc.vemser.refoundapi.dataTransfer.RefundCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.RefundDTO;
 import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.repository.RefundRepository;
-import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -40,7 +39,7 @@ public class RefundService {
     public RefundDTO update(Integer id, RefundCreateDTO refundAtt)throws Exception{
     RefundEntity refundFound = refundRepository.findById(id)
             .orElseThrow(()-> new RuntimeException("Refund not found!"));
-    refundFound.setData(refundAtt.getData());
+    refundFound.setDate(refundAtt.getDate());
     refundFound.setStatus(refundAtt.getStatus());
     refundFound.setTitle(refundAtt.getTitle());
     refundFound.setValue(refundAtt.getValue());
