@@ -1,17 +1,22 @@
 package dbc.vemser.refoundapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dbc.vemser.refoundapi.dataTransfer.UserCreateDTO;
-import dbc.vemser.refoundapi.dataTransfer.UserDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
+import dbc.vemser.refoundapi.entity.RoleEntity;
 import dbc.vemser.refoundapi.entity.UserEntity;
+import dbc.vemser.refoundapi.repository.RoleRepository;
 import dbc.vemser.refoundapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,14 +27,23 @@ public class UserService {
     private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
 
+    private final RoleRepository roleRepository;
+
 
     public UserDTO save(UserCreateDTO userCreate, MultipartFile file) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
-        userCreate.setImage(file.getBytes());
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
+
+        userEntity.setImage(file.getBytes());
+
+        Set<RoleEntity> roleEntities = new HashSet<>();
+        roleEntities.add(roleRepository.getById(4));
+        userEntity.setRoleEntities(roleEntities);
+
+        userEntity.setPassword(new BCryptPasswordEncoder().encode(userCreate.getPassword()));
+
         UserEntity userSaved = userRepository.save(userEntity);
-        UserDTO userDTO = objectMapper.convertValue(userSaved, UserDTO.class);
-        return userDTO;
+        return objectMapper.convertValue(userSaved, UserDTO.class);
     }
 
     public List<UserDTO> list() {
@@ -40,17 +54,21 @@ public class UserService {
     }
 
 
-    public UserDTO update(Integer id, UserCreateDTO userAtt) throws Exception {
+    //TODO - Avisar pro front pra n deixar passar vazio
+    public UserDTO update(Integer id, String password, MultipartFile file) throws Exception {
         log.info("Chamada de método:: LIST USER!");
         UserEntity userFound = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
-        userFound.setImage(userAtt.getImage());
-        userFound.setEmail(userAtt.getEmail());
-        userFound.setName(userAtt.getName());
-        userFound.setPassword(userAtt.getPassword());
+
+        if (!file.isEmpty()){
+            userFound.setImage(file.getBytes());
+        }
+
+        if (!password.isEmpty() && !password.isBlank()){
+            userFound.setPassword(password);
+        }
         UserEntity userEntityAtt = userRepository.save(userFound);
-        UserDTO userDTO = objectMapper.convertValue(userEntityAtt, UserDTO.class);
-        return userDTO;
+        return objectMapper.convertValue(userEntityAtt, UserDTO.class);
     }
 
 
@@ -59,8 +77,7 @@ public class UserService {
         UserEntity userFound = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
         userRepository.delete(userFound);
-        UserDTO userDTO = objectMapper.convertValue(userFound, UserDTO.class);
-        return userDTO;
+        return objectMapper.convertValue(userFound, UserDTO.class);
     }
 
     public List<UserDTO> findByNameContainingIgnoreCase(String name) throws Exception {

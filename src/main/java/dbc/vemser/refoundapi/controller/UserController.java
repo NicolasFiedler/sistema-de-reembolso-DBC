@@ -1,7 +1,7 @@
 package dbc.vemser.refoundapi.controller;
 
-import dbc.vemser.refoundapi.dataTransfer.UserCreateDTO;
-import dbc.vemser.refoundapi.dataTransfer.UserDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -29,7 +29,8 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping("/saveUser")
-    public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate, @RequestParam(value = "file", required = false) MultipartFile file) throws Exception {
+    public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate) throws Exception {
+        MultipartFile file = null;
         return userService.save(userCreate, file);
     }
 
@@ -50,9 +51,9 @@ public class UserController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PutMapping("/updateUser")
-    public UserDTO update(@RequestParam Integer id, @Valid @RequestBody UserCreateDTO userAtt) throws Exception {
-        return userService.update(id, userAtt);
+    @PutMapping("/updateUser")                                                                       //TODO - ver com o front
+    public UserDTO update(@RequestParam Integer id, @RequestParam(required = false) String password, @RequestParam(required = false) MultipartFile file) throws Exception {
+        return userService.update(id, password, file);
     }
 
     @ApiOperation(value = "Retorna um usuario deletado")

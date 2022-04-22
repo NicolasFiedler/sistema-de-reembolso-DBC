@@ -27,7 +27,7 @@ public class RefundService {
         RefundEntity refundEntity = objectMapper.convertValue(refundCreate, RefundEntity.class);
         refundEntity.setDate(LocalDateTime.now());
         RefundEntity refundCreated = refundRepository.save(refundEntity);
-        return objectMapper.convertValue(refundCreate, RefundDTO.class);
+        return objectMapper.convertValue(refundCreated, RefundDTO.class);
     }
 
     public List<RefundDTO> list() {

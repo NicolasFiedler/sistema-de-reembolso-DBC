@@ -59,6 +59,7 @@ public class TokenService {
         }
 
         return LogedDTO.builder()
+                .id(user.getIdUser())
                 .name(user.getName())
                 .email(user.getEmail())
                 .image(user.getImage())

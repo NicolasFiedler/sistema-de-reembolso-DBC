@@ -1,4 +1,4 @@
-package dbc.vemser.refoundapi.dataTransfer;
+package dbc.vemser.refoundapi.dataTransfer.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
