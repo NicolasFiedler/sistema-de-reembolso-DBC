@@ -1,6 +1,8 @@
 package dbc.vemser.refoundapi.security;
 
+import dbc.vemser.refoundapi.dataTransfer.LogedDTO;
 import dbc.vemser.refoundapi.entity.UserEntity;
+import dbc.vemser.refoundapi.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,13 +27,15 @@ public class TokenService {
     private static final String HEADER_AUTHORIZATION = "Authorization";
     private static final String CHAVE_REGRAS = "REGRAS";
 
+    private final UserRepository userRepository;
+
     @Value("${jwt.expiration}")
     private String expiration;
 
     @Value("${jwt.secret}")
     private String secret;
 
-    public String getToken(Authentication authentication) {
+    public LogedDTO getToken(Authentication authentication) {
         UserEntity user = (UserEntity) authentication.getPrincipal();
 
         Date now = new Date();
@@ -50,7 +54,17 @@ public class TokenService {
                 .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
 
-        return PREFIX + token;
+        if (userRepository.findById(user.getIdUser()).isPresent()) {
+            user = userRepository.findById(user.getIdUser()).get();
+        }
+
+        return LogedDTO.builder()
+                .name(user.getName())
+                .email(user.getEmail())
+                .image(user.getImage())
+                .roles(user.getRoleEntities())
+                .token(PREFIX + token)
+                .build();
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {

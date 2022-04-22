@@ -1,6 +1,7 @@
 package dbc.vemser.refoundapi.controller;
 
 import dbc.vemser.refoundapi.dataTransfer.AuthDTO;
+import dbc.vemser.refoundapi.dataTransfer.LogedDTO;
 import dbc.vemser.refoundapi.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +23,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     @PostMapping()
-    public String auth(@RequestBody @Valid AuthDTO authDTO) {
+    public LogedDTO auth(@RequestBody @Valid AuthDTO authDTO) {
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         authDTO.getLogin(),
