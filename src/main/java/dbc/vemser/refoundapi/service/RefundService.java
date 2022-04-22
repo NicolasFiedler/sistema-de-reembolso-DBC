@@ -30,6 +30,7 @@ public class RefundService {
         return objectMapper.convertValue(refundCreated, RefundDTO.class);
     }
 
+    //TODO - list de acordo com as ROLES
     public List<RefundDTO> list() {
         log.info("Chamada de método:: List Refund!");
         return refundRepository.findAll().stream()
@@ -37,6 +38,7 @@ public class RefundService {
                 .collect(Collectors.toList());
     }
 
+    //TODO - conferir de quem eh o ticket antes de atualizar
     public RefundDTO update(Integer id, RefundCreateDTO refundAtt) throws Exception {
         RefundEntity refundFound = refundRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Refund not found!"));
@@ -47,6 +49,7 @@ public class RefundService {
         return objectMapper.convertValue(refundEntity, RefundDTO.class);
     }
 
+    //TODO - conferir de quem eh o ticket antes de deletar
     public RefundDTO delete(Integer id) throws Exception {
         RefundEntity refundFound = refundRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Refund not found"));

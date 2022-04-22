@@ -24,13 +24,15 @@ public class AuthController {
     private final TokenService tokenService;
     @PostMapping()
     public LogedDTO auth(@RequestBody @Valid AuthDTO authDTO) {
+        System.out.println("mais antes ainda");
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
                 new UsernamePasswordAuthenticationToken(
                         authDTO.getLogin(),
                         authDTO.getPassword()
                 );
-
+        System.out.println("antes");
         Authentication authenticate = authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+        System.out.println("chegour");
         return tokenService.getToken(authenticate);
     }
 }

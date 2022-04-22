@@ -21,13 +21,11 @@ public class ItemService {
     private final ObjectMapper objectMapper;
 
 
-    public ItemDTO create(ItemCreateDTO itemCreate, MultipartFile file) throws Exception {
+    public ItemDTO create(ItemCreateDTO itemCreate) throws Exception {
         log.info("Chamada de método:: CREATE ITEM!");
-        itemCreate.setImage(file.getBytes());
         ItemEntity itemEntity = objectMapper.convertValue(itemCreate, ItemEntity.class);
         ItemEntity itemCreated = itemRepository.save(itemEntity);
-        ItemDTO itemDTO = objectMapper.convertValue(itemCreated, ItemDTO.class);
-        return itemDTO;
+        return objectMapper.convertValue(itemCreated, ItemDTO.class);
     }
 
     public ItemDTO update(Integer id, ItemCreateDTO itemAtt) {
@@ -39,8 +37,7 @@ public class ItemService {
         itemFound.setDate(itemAtt.getDate());
         itemFound.setValue(itemAtt.getValue());
         ItemEntity itemEntity = itemRepository.save(itemFound);
-        ItemDTO itemDTO = objectMapper.convertValue(itemEntity, ItemDTO.class);
-        return itemDTO;
+        return objectMapper.convertValue(itemEntity, ItemDTO.class);
     }
 
     public ItemDTO list() {
@@ -55,7 +52,6 @@ public class ItemService {
         ItemEntity itemFound = itemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found!"));
         itemRepository.delete(itemFound);
-        ItemDTO itemDTO = objectMapper.convertValue(itemFound, ItemDTO.class);
-        return itemDTO;
+        return objectMapper.convertValue(itemFound, ItemDTO.class);
     }
 }

@@ -14,14 +14,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserDTO {
+public class UserDTO extends UserCreateDTO{
 
     private Integer idUser;
-    @NotEmpty
-    @Size(min = 2, max = 40, message = "o nome deve conter entre 2 e 40 caracteres")
-    private String name;
-    @Email
-    private String email;
-
-    private byte[] image;
 }

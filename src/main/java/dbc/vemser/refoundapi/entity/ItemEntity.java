@@ -29,9 +29,8 @@ public class ItemEntity {
     @Column(name = "value")
     private Double value;
 
-    @Lob
     @Column(name = "attachment")
-    private byte[] image;
+    private String image;
 
     @Column(name = "id_refund", insertable = false, updatable = false)
     private Integer idRefund;

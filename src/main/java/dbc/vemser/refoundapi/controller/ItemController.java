@@ -26,8 +26,8 @@ public class ItemController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping("/createItem")
-    public ItemDTO create(@Valid @RequestBody ItemCreateDTO itemCreate, @RequestParam("file") MultipartFile file) throws Exception {
-        return itemService.create(itemCreate, file);
+    public ItemDTO create(@Valid @RequestBody ItemCreateDTO itemCreate) throws Exception {
+        return itemService.create(itemCreate);
     }
 
     @ApiOperation(value = "Retorna um item atualizado")

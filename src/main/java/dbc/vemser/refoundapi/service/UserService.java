@@ -30,11 +30,9 @@ public class UserService {
     private final RoleRepository roleRepository;
 
 
-    public UserDTO save(UserCreateDTO userCreate, MultipartFile file) throws Exception {
+    public UserDTO save(UserCreateDTO userCreate) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
-
-        userEntity.setImage(file.getBytes());
 
         Set<RoleEntity> roleEntities = new HashSet<>();
         roleEntities.add(roleRepository.getById(4));
@@ -46,6 +44,7 @@ public class UserService {
         return objectMapper.convertValue(userSaved, UserDTO.class);
     }
 
+    //ADMIN
     public List<UserDTO> list() {
         log.info("Chamada de método:: LIST USER!");
         return userRepository.findAll().stream()
@@ -54,14 +53,19 @@ public class UserService {
     }
 
 
+    /*
+        image imagem = ???
+        string var = conversorDeBase64(imagem);
+     */
+
     //TODO - Avisar pro front pra n deixar passar vazio
-    public UserDTO update(Integer id, String password, MultipartFile file) throws Exception {
+    public UserDTO update(Integer id, String password, String image) throws Exception {
         log.info("Chamada de método:: LIST USER!");
         UserEntity userFound = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
-        if (!file.isEmpty()){
-            userFound.setImage(file.getBytes());
+        if (!image.isEmpty() && !image.isBlank()){
+            userFound.setImage(image);
         }
 
         if (!password.isEmpty() && !password.isBlank()){
@@ -71,7 +75,7 @@ public class UserService {
         return objectMapper.convertValue(userEntityAtt, UserDTO.class);
     }
 
-
+    //ADMIN
     public UserDTO delete(Integer id) throws Exception {
         log.info("Chamada de método:: DELETE USER!");
         UserEntity userFound = userRepository.findById(id)

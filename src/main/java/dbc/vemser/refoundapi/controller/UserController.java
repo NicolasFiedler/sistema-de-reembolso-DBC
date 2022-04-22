@@ -31,7 +31,7 @@ public class UserController {
     @PostMapping("/saveUser")
     public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate) throws Exception {
         MultipartFile file = null;
-        return userService.save(userCreate, file);
+        return userService.save(userCreate);
     }
 
     @ApiOperation(value = "Retorna uma lista de usuarios cadastrados")
@@ -51,8 +51,8 @@ public class UserController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PutMapping("/updateUser")                                                                       //TODO - ver com o front
-    public UserDTO update(@RequestParam Integer id, @RequestParam(required = false) String password, @RequestParam(required = false) MultipartFile file) throws Exception {
+    @PutMapping("/updateUser")
+    public UserDTO update(@RequestParam Integer id, @RequestParam(required = false) String password, @RequestParam(required = false) String file) throws Exception {
         return userService.update(id, password, file);
     }
 
