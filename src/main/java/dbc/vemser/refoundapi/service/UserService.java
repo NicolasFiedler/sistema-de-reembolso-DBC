@@ -5,6 +5,7 @@ import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.entity.RoleEntity;
 import dbc.vemser.refoundapi.entity.UserEntity;
+import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.repository.RoleRepository;
 import dbc.vemser.refoundapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,9 +35,11 @@ public class UserService {
         log.info("Chamada de método:: SAVE USER!");
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
 
-        Set<RoleEntity> roleEntities = new HashSet<>();
-        roleEntities.add(roleRepository.getById(4));
-        userEntity.setRoleEntities(roleEntities);
+        Set<RoleEntity> roles = new HashSet<>();
+        RoleEntity roleEntity = roleRepository.findById(4)
+                .orElseThrow(() -> new BusinessRuleException("Role not found!"));
+        roles.add(roleEntity);
+        userEntity.setRoleEntities(roles);
 
         userEntity.setPassword(new BCryptPasswordEncoder().encode(userCreate.getPassword()));
 

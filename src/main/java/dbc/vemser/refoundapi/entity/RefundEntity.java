@@ -19,6 +19,8 @@ import java.util.Set;
 public class RefundEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "refund_id_refund_seq")
+    @SequenceGenerator(name = "refund_id_refund_seq", sequenceName = "refund_id_refund_seq", allocationSize = 1)
     @Column(name = "id_refund")
     private Integer idRefund;
 

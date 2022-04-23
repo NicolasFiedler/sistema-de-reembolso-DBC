@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
@@ -22,6 +19,8 @@ import java.util.Set;
 public class RoleEntity implements Serializable, GrantedAuthority {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "roles_id_role_seq")
+    @SequenceGenerator(name = "roles_id_role_seq", sequenceName = "roles_id_role_seq", allocationSize = 1)
     @Column(name = "id_role")
     private Integer idRole;
 

@@ -17,6 +17,8 @@ import java.time.LocalDateTime;
 public class ItemEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "item_id_item_seq")
+    @SequenceGenerator(name = "item_id_item_seq", sequenceName = "item_id_item_seq", allocationSize = 1)
     @Column(name = "id_item")
     private Integer idItem;
 
