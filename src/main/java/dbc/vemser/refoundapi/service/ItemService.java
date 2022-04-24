@@ -30,7 +30,7 @@ public class ItemService {
 
     public ItemDTO create(Integer idRefund, ItemCreateDTO itemCreate) {
         log.info("Chamada de método:: CREATE ITEM!");
-//TODO - Fazer manual
+
         ItemEntity itemEntity = objectMapper.convertValue(itemCreate, ItemEntity.class);
 
         RefundEntity r = refundRepository.getById(idRefund);

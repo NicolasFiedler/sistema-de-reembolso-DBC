@@ -42,7 +42,7 @@ public class RefundService {
 
     private final DateTimeFormatter REFUND_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-
+    //TODO - alterar tipo de data no banco
     public RefundDTO create(Integer idUser, RefundCreateDTO refundCreate) {
         log.info("Chamada de método:: CREATE REFUND!");
 
@@ -80,7 +80,7 @@ public class RefundService {
         return refundDTO;
     }
 
-    //TODO - list de acordo com as ROLES
+    //TODO - ordenar por ID
     public List<RefundDTO> list(Integer idUser) {
         log.info("Chamada de método:: List Refund!");
 
