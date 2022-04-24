@@ -1,15 +1,18 @@
 package dbc.vemser.refoundapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dbc.vemser.refoundapi.dataTransfer.ItemCreateDTO;
-import dbc.vemser.refoundapi.dataTransfer.ItemDTO;
+import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
+import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
 import dbc.vemser.refoundapi.entity.ItemEntity;
+import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.repository.ItemRepository;
+import dbc.vemser.refoundapi.repository.RefundRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,26 +21,46 @@ import java.util.stream.Collectors;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+
+    private final RefundRepository refundRepository;
     private final ObjectMapper objectMapper;
 
+    private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
-    public ItemDTO create(ItemCreateDTO itemCreate) throws Exception {
+
+    public ItemDTO create(Integer idRefund, ItemCreateDTO itemCreate) {
         log.info("Chamada de método:: CREATE ITEM!");
+//TODO - Fazer manual
         ItemEntity itemEntity = objectMapper.convertValue(itemCreate, ItemEntity.class);
+
+        RefundEntity r = refundRepository.getById(idRefund);
+        itemEntity.setIdRefund(idRefund);
+        itemEntity.setRefundEntity(r);
+        itemEntity.setDate(LocalDate.parse(itemCreate.getDateItem(), FORMATTER));
+
         ItemEntity itemCreated = itemRepository.save(itemEntity);
-        return objectMapper.convertValue(itemCreated, ItemDTO.class);
+
+        ItemDTO itemDTO = objectMapper.convertValue(itemCreated, ItemDTO.class);
+        itemDTO.setDateItem(itemCreated.getDate().format(FORMATTER));
+        return itemDTO;
     }
 
     public ItemDTO update(Integer id, ItemCreateDTO itemAtt) {
         log.info("Chamada de método:: UPDATE ITEM!");
+
         ItemEntity itemFound = itemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found!"));
+
         itemFound.setImage(itemAtt.getImage());
         itemFound.setName(itemAtt.getName());
-        itemFound.setDate(itemAtt.getDate());
+        itemFound.setDate(LocalDate.parse(itemAtt.getDateItem(), FORMATTER));
         itemFound.setValue(itemAtt.getValue());
+
         ItemEntity itemEntity = itemRepository.save(itemFound);
-        return objectMapper.convertValue(itemEntity, ItemDTO.class);
+
+        ItemDTO itemDTO = objectMapper.convertValue(itemEntity, ItemDTO.class);
+        itemDTO.setDateItem(itemEntity.getDate().format(FORMATTER));
+        return itemDTO;
     }
 
     public ItemDTO list() {

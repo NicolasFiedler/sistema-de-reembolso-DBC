@@ -1,14 +1,13 @@
 package dbc.vemser.refoundapi.controller;
 
-import dbc.vemser.refoundapi.dataTransfer.ItemCreateDTO;
-import dbc.vemser.refoundapi.dataTransfer.ItemDTO;
+import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
+import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
 import dbc.vemser.refoundapi.service.ItemService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 
@@ -26,8 +25,8 @@ public class ItemController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping("/createItem")
-    public ItemDTO create(@Valid @RequestBody ItemCreateDTO itemCreate) throws Exception {
-        return itemService.create(itemCreate);
+    public ItemDTO create(@RequestParam Integer idRefund, @Valid @RequestBody ItemCreateDTO itemCreate) throws Exception {
+        return itemService.create(idRefund, itemCreate);
     }
 
     @ApiOperation(value = "Retorna um item atualizado")

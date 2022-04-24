@@ -1,17 +1,19 @@
 package dbc.vemser.refoundapi.enums;
 
-public enum Status {
-    ABERTO("aberto"), APROVADOG("aprovado-gestor"), REPROVADOG("reprovado-gestor"),
-    REPROVADOF("reprovado-financeiro"), FECHADO("fechado-pago");
+import lombok.Getter;
 
-    private final String nome;
+@Getter
+public enum Status {
+    ABERTO("aberto"),
+    APROVADOG("aprovado-gestor"),
+    REPROVADOG("reprovado-gestor"),
+    FECHADO("fechado-pago"),
+    REPROVADOF("reprovado-financeiro");
+
+    private final String name;
 
     Status(String nome) {
-        this.nome = nome;
-    }
-
-    public String getNome() {
-        return nome;
+        this.name = nome;
     }
 
 }

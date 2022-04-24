@@ -1,12 +1,14 @@
 package dbc.vemser.refoundapi.controller;
 
-import dbc.vemser.refoundapi.dataTransfer.RefundCreateDTO;
-import dbc.vemser.refoundapi.dataTransfer.RefundDTO;
+import dbc.vemser.refoundapi.dataTransfer.refund.RefundCreateDTO;
+import dbc.vemser.refoundapi.dataTransfer.refund.RefundDTO;
+import dbc.vemser.refoundapi.dataTransfer.refund.RefundUpdateDTO;
 import dbc.vemser.refoundapi.service.RefundService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +28,10 @@ public class RefundController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping("/createRefund")
+    @PostMapping("/")
     public RefundDTO create(@RequestBody RefundCreateDTO refundCreate) {
-        return refundService.create(refundCreate);
+        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return refundService.create(Integer.parseInt(id), refundCreate);
     }
 
     @ApiOperation(value = "Retorna uma lista de reembolsos")
@@ -37,9 +40,10 @@ public class RefundController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @GetMapping("/listAllRefunds")
+    @GetMapping("/")
     public List<RefundDTO> list() {
-        return refundService.list();
+        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return refundService.list(Integer.parseInt(id));
     }
 
     @ApiOperation(value = "Retorna um refund atualizado")
@@ -48,8 +52,8 @@ public class RefundController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PutMapping("/updateRefund")
-    public RefundDTO update(@PathVariable Integer id, RefundCreateDTO refundAtt) throws Exception {
+    @PutMapping("/")
+    public RefundDTO update(@PathVariable Integer id, RefundUpdateDTO refundAtt) throws Exception {
         return refundService.update(id, refundAtt);
     }
 
@@ -59,7 +63,7 @@ public class RefundController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @DeleteMapping("/deleteRefund")
+    @DeleteMapping("/")
     public RefundDTO delete(@PathVariable Integer id) throws Exception {
         return refundService.delete(id);
     }

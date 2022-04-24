@@ -28,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/auth/**/").permitAll()
                 .antMatchers(HttpMethod.POST,"/user/saveUser/**").permitAll()
+                .antMatchers(HttpMethod.POST,"/refund/**").hasRole("COLABORADOR")
+                .antMatchers(HttpMethod.GET,"/refund/").hasAnyRole("ADMIN", "FINANCEIRO", "GESTOR","COLABORADOR")
                 .antMatchers("/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and().addFilterBefore(new TokenAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);

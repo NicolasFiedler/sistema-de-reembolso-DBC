@@ -1,4 +1,4 @@
-package dbc.vemser.refoundapi.dataTransfer;
+package dbc.vemser.refoundapi.dataTransfer.item;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,7 +21,7 @@ public class ItemCreateDTO {
     @Size(min = 2, max = 60, message = "o nome deve conter entre 2 a 60 caracteres")
     private String name;
 
-    private LocalDateTime date;
+    private String dateItem;
     @NotNull
     @DecimalMin(value = "0.01", message = "Não é permitido números negativos.")
     private Double value;

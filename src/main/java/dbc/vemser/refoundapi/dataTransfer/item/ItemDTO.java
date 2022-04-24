@@ -1,5 +1,6 @@
-package dbc.vemser.refoundapi.dataTransfer;
+package dbc.vemser.refoundapi.dataTransfer.item;
 
+import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

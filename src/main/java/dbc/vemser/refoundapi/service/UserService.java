@@ -61,7 +61,6 @@ public class UserService {
         string var = conversorDeBase64(imagem);
      */
 
-    //TODO - Avisar pro front pra n deixar passar vazio
     public UserDTO update(Integer id, String password, String image) throws Exception {
         log.info("Chamada de método:: LIST USER!");
         UserEntity userFound = userRepository.findById(id)

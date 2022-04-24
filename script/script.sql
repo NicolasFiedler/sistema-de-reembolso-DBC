@@ -47,7 +47,7 @@ CREATE TABLE refund_db.refund (
   id_refund SERIAL,
   title TEXT NOT NULL,
   date DATE NOT NULL,
-  value NUMERIC(9, 2) NOT NULL,
+  value NUMERIC(9, 2),
   status NUMERIC NOT NULL,
   id_user INTEGER NOT NULL,
 
