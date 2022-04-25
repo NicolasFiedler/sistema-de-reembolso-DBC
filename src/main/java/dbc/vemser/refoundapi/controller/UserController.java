@@ -35,15 +35,15 @@ public class UserController {
         return userService.save(userCreate);
     }
 
-    @ApiOperation(value = "Retorna uma lista de usuarios cadastrados")
+    @ApiOperation(value = "Retorna uma lista de usuarios cadastrados listados pelo id")
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "list users"),
+            @ApiResponse(code = 200, message = "order list by id users"),
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @GetMapping("/listAllUser")
-    public List<UserDTO> list() {
-        return userService.list();
+    @GetMapping("/listAllUserOrderById")
+    public Page<UserDTO> listOrderById(Integer requestPage,Integer sizePage) {
+        return userService.listOrderById(requestPage,sizePage);
     }
 
     @ApiOperation(value = "Retorna um usuario atualizado")

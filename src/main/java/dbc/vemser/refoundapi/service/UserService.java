@@ -53,11 +53,16 @@ public class UserService {
     }
 
     //ADMIN
-    public List<UserDTO> list() {
-        log.info("Chamada de método:: LIST USER!");
-        return userRepository.findAll().stream()
-                .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class))
-                .collect(Collectors.toList());
+//    public List<UserDTO> list() {
+//        log.info("Chamada de método:: LIST USER!");
+//        return userRepository.findAll().stream()
+//                .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class))
+//                .collect(Collectors.toList());
+//    }
+    public Page<UserDTO> listOrderById(Integer requestPage,Integer sizePage) {
+        Pageable pageable = PageRequest.of(requestPage, sizePage, Sort.by("idUser").ascending());
+        return userRepository.findAll(pageable)
+                .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class));
     }
 
 
