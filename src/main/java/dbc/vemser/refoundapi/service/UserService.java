@@ -39,6 +39,9 @@ public class UserService {
 
     public UserDTO save(UserCreateDTO userCreate, Roles rolesEnum) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
+        userRepository.findByEmail(userCreate.getEmail())
+                .orElseThrow(() -> new BusinessRuleException("Email indisponivel!"));
+
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
 
         Set<RoleEntity> roles = new HashSet<>();
