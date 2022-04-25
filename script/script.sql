@@ -17,7 +17,7 @@ CREATE TABLE refund_db.roles (
 CREATE TABLE refund_db.users (
   id_user SERIAL,
   name TEXT NOT NULL,
-  email TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
   password TEXT NOT NULL,
   image TEXT,
 
