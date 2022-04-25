@@ -7,8 +7,8 @@ public enum Status {
     ABERTO("aberto"),
     APROVADOG("aprovado-gestor"),
     REPROVADOG("reprovado-gestor"),
-    FECHADO("fechado-pago"),
-    REPROVADOF("reprovado-financeiro");
+    REPROVADOF("reprovado-financeiro"),
+    FECHADO("fechado-pago");
 
     private final String name;
 

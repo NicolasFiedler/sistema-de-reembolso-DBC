@@ -3,6 +3,7 @@ package dbc.vemser.refoundapi.controller;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundUpdateDTO;
+import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.service.RefundService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -42,9 +43,9 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @GetMapping("/")
-    public List<RefundDTO> list() {
+    public Page<RefundDTO> list(@RequestParam Integer page, @RequestParam Integer size) {
         String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return refundService.list(Integer.parseInt(id));
+        return refundService.list(Integer.parseInt(id), page, size);
     }
 
     @ApiOperation(value = "Retorna um refund atualizado")
@@ -65,8 +66,9 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @DeleteMapping("/")
-    public RefundDTO delete(@PathVariable Integer id) throws Exception {
-        return refundService.delete(id);
+    public RefundDTO delete(@RequestParam Integer id) throws BusinessRuleException {
+        String idUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return refundService.delete(id, Integer.parseInt(idUser));
     }
 
     @ApiOperation(value = "Retorna uma lista de refund ordenada por data!")

@@ -12,18 +12,17 @@ import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.entity.RoleEntity;
 import dbc.vemser.refoundapi.entity.UserEntity;
 import dbc.vemser.refoundapi.enums.Status;
+import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.repository.RefundRepository;
 import dbc.vemser.refoundapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.List;
@@ -47,12 +46,11 @@ public class RefundService {
 
     private final DateTimeFormatter REFUND_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    //TODO - alterar tipo de data no banco
     public RefundDTO create(Integer idUser, RefundCreateDTO refundCreate) {
         log.info("Chamada de método:: CREATE REFUND!");
 
         RefundEntity refundEntity = objectMapper.convertValue(refundCreate, RefundEntity.class);
-        refundEntity.setDate(LocalDateTime.now());
+        refundEntity.setDate(LocalDateTime.now(ZoneId.of("UTC-03:00")));
         refundEntity.setStatus(Status.ABERTO);
 
         UserEntity u = userRepository.getById(idUser);
@@ -85,28 +83,26 @@ public class RefundService {
         return refundDTO;
     }
 
-    //TODO - ordenar por ID
-    public List<RefundDTO> list(Integer idUser) {
+    public Page<RefundDTO> list(Integer idUser, Integer requestPage, Integer sizePage) {
         log.info("Chamada de método:: List Refund!");
 
         UserEntity userEntity = userRepository.getById(idUser);
+        Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("status").ascending().and(Sort.by("date").descending()));
 
         return switch (roleToNumeric(userEntity)) {
-            case 1 -> refundRepository.findAll().stream()
-                    .map(this::prepareDTO)
-                    .collect(Collectors.toList());
+            case 1 -> refundRepository.findAll(pageable)
+                    .map(this::prepareDTO);
 
-            case 2 -> refundRepository.findByStatus(Status.APROVADOG).stream()
-                    .map(this::prepareDTO)
-                    .collect(Collectors.toList());
+            case 2 -> refundRepository.findByStatus(Status.APROVADOG, pageable)
+                    .map(this::prepareDTO);
 
-            case 3 -> refundRepository.findByStatus(Status.ABERTO).stream()
-                    .map(this::prepareDTO)
-                    .collect(Collectors.toList());
+            case 3 -> refundRepository.findByStatus(Status.ABERTO, pageable)//.stream()
+                    .map(this::prepareDTO);
 
-            case 4 -> userEntity.getRefundEntities().stream()
+            case 4 -> new PageImpl<> (userEntity.getRefundEntities().stream()
                     .map(this::prepareDTO)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toList()), pageable, userEntity.getRefundEntities().stream()
+                    .map(this::prepareDTO).toList().size());
 
             default -> null;
         };
@@ -143,17 +139,19 @@ public class RefundService {
         return objectMapper.convertValue(refundEntity, RefundDTO.class);
     }
 
-    //TODO - conferir de quem eh o ticket antes de deletar
-    public RefundDTO delete(Integer id) throws Exception {
-        RefundEntity refundFound = refundRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Refund not found"));
-        refundRepository.delete(refundFound);
-        return objectMapper.convertValue(refundFound, RefundDTO.class);
+    public RefundDTO delete(Integer idRefund, Integer idUser) throws BusinessRuleException {
+
+        RefundEntity refundFounded = refundRepository.findByIdRefundAndIdUserAndStatus(idRefund, idUser, Status.ABERTO)
+                .orElseThrow(() -> new BusinessRuleException("Invalid operation"));
+        RefundDTO refundDTO = prepareDTO(refundFounded);
+
+        refundRepository.delete(refundFounded);
+        return refundDTO;
     }
 
     public Page<RefundDTO> orderByDate(Integer requestPage, Integer sizePage){
-        Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("date").descending());
+        Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("status").ascending().and(Sort.by("date").descending()));
         return refundRepository.findAll(pageable)
-                .map(refundEntity -> objectMapper.convertValue(refundEntity, RefundDTO.class));
+                .map(this::prepareDTO);
     }
 }
