@@ -2,6 +2,7 @@ package dbc.vemser.refoundapi.controller;
 
 import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
+import dbc.vemser.refoundapi.enums.Roles;
 import dbc.vemser.refoundapi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -29,10 +30,20 @@ public class UserController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
+    @PostMapping("/saveAdmin")
+    public UserDTO saveAdmin(@Valid @RequestBody UserCreateDTO userCreate, @RequestParam Roles rolesEnum) throws Exception {
+        return userService.save(userCreate, rolesEnum);
+    }
+
+    @ApiOperation(value = "Retorna uma pessoa criada")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "save users"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
     @PostMapping("/saveUser")
     public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate) throws Exception {
-        MultipartFile file = null;
-        return userService.save(userCreate);
+        return userService.save(userCreate,Roles.ROLE_COLABORADOR);
     }
 
     @ApiOperation(value = "Retorna uma lista de usuarios cadastrados listados pelo id")
