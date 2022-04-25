@@ -153,7 +153,7 @@ public class RefundService {
 
     public Page<RefundDTO> orderByDate(Integer requestPage, Integer sizePage){
         Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("date").descending());
-        Page<RefundEntity> refundEntities = refundRepository.findAll(pageable);
-        return (Page<RefundDTO>) objectMapper.convertValue(refundEntities, RefundDTO.class);
+        return refundRepository.findAll(pageable)
+                .map(refundEntity -> objectMapper.convertValue(refundEntity, RefundDTO.class));
     }
 }

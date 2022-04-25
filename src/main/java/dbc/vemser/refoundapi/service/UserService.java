@@ -1,6 +1,7 @@
 package dbc.vemser.refoundapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dbc.vemser.refoundapi.dataTransfer.refund.RefundDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.entity.RoleEntity;
@@ -103,7 +104,7 @@ public class UserService {
 
    public Page<UserDTO> orderByName(Integer requestPage,Integer sizePage){
        Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("name").ascending());
-       Page<UserEntity> userEntities = userRepository.findAll(pageable);
-       return (Page<UserDTO>) objectMapper.convertValue(userEntities, UserDTO.class);
+       return userRepository.findAll(pageable)
+               .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class));
    }
 }
