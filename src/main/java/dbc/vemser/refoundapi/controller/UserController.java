@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,5 +77,16 @@ public class UserController {
     @GetMapping("/findUserByName")
     public List<UserDTO> findByNameContainingIgnoreCase(String name) throws Exception {
         return userService.findByNameContainingIgnoreCase(name);
+    }
+
+    @ApiOperation(value = "Retorna uma lista de usuario ordenada pelo nome!")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "order by user name"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
+    @GetMapping("/orderByName")
+    public Page<UserDTO> orderByName(Integer requestPage, Integer sizePage){
+        return userService.orderByName(requestPage,sizePage);
     }
 }

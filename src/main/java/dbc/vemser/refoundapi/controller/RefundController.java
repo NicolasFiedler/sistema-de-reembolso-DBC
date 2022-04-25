@@ -8,6 +8,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -68,4 +69,14 @@ public class RefundController {
         return refundService.delete(id);
     }
 
+    @ApiOperation(value = "Retorna uma lista de refund ordenada por data!")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "order list by date"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
+    @GetMapping("/orderByDate")
+    public Page<RefundDTO> orderByDate(Integer requestPage, Integer sizePage){
+        return  refundService.orderByDate(requestPage,sizePage);
+    }
 }

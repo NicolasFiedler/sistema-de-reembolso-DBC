@@ -6,6 +6,7 @@ import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundUpdateDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.entity.ItemEntity;
 import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.entity.RoleEntity;
@@ -15,6 +16,10 @@ import dbc.vemser.refoundapi.repository.RefundRepository;
 import dbc.vemser.refoundapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -144,5 +149,11 @@ public class RefundService {
                 .orElseThrow(() -> new RuntimeException("Refund not found"));
         refundRepository.delete(refundFound);
         return objectMapper.convertValue(refundFound, RefundDTO.class);
+    }
+
+    public Page<RefundDTO> orderByDate(Integer requestPage, Integer sizePage){
+        Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("date").descending());
+        Page<RefundEntity> refundEntities = refundRepository.findAll(pageable);
+        return (Page<RefundDTO>) objectMapper.convertValue(refundEntities, RefundDTO.class);
     }
 }

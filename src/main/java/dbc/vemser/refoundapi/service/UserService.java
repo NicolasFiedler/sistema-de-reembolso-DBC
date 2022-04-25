@@ -10,6 +10,10 @@ import dbc.vemser.refoundapi.repository.RoleRepository;
 import dbc.vemser.refoundapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -95,5 +99,11 @@ public class UserService {
 
    public Optional<UserEntity> findByEmail (String email){
         return userRepository.findByEmail(email);
+   }
+
+   public Page<UserDTO> orderByName(Integer requestPage,Integer sizePage){
+       Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("name").ascending());
+       Page<UserEntity> userEntities = userRepository.findAll(pageable);
+       return (Page<UserDTO>) objectMapper.convertValue(userEntities, UserDTO.class);
    }
 }
