@@ -1,12 +1,10 @@
 package dbc.vemser.refoundapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dbc.vemser.refoundapi.dataTransfer.refund.RefundDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.entity.RoleEntity;
 import dbc.vemser.refoundapi.entity.UserEntity;
-import dbc.vemser.refoundapi.enums.Roles;
 import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.repository.RoleRepository;
 import dbc.vemser.refoundapi.repository.UserRepository;
@@ -18,7 +16,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +34,7 @@ public class UserService {
     private final RoleRepository roleRepository;
 
 
-    public UserDTO save(UserCreateDTO userCreate, Roles rolesEnum) throws Exception {
+    public UserDTO save(UserCreateDTO userCreate, Integer role) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
         userRepository.findByEmail(userCreate.getEmail())
                 .orElseThrow(() -> new BusinessRuleException("Email indisponivel!"));
@@ -45,7 +42,7 @@ public class UserService {
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
 
         Set<RoleEntity> roles = new HashSet<>();
-        RoleEntity roleEntity = roleRepository.findById(rolesEnum.getId())
+        RoleEntity roleEntity = roleRepository.findById(role)
                 .orElseThrow(() -> new BusinessRuleException("Role not found!"));
         roles.add(roleEntity);
         userEntity.setRoleEntities(roles);

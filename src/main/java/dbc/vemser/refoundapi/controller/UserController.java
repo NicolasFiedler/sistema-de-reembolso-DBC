@@ -2,7 +2,6 @@ package dbc.vemser.refoundapi.controller;
 
 import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
-import dbc.vemser.refoundapi.enums.Roles;
 import dbc.vemser.refoundapi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -31,9 +29,10 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping("/saveAdmin")
-    public UserDTO saveAdmin(@Valid @RequestBody UserCreateDTO userCreate, @RequestParam Roles rolesEnum) throws Exception {
-        return userService.save(userCreate, rolesEnum);
+    public UserDTO saveAdmin(@Valid @RequestBody UserCreateDTO userCreate, @RequestParam Integer role) throws Exception {
+        return userService.save(userCreate, role);
     }
+
 
     @ApiOperation(value = "Retorna uma pessoa criada")
     @ApiResponses(value = {
@@ -43,7 +42,7 @@ public class UserController {
     })
     @PostMapping("/saveUser")
     public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate) throws Exception {
-        return userService.save(userCreate,Roles.ROLE_COLABORADOR);
+        return userService.save(userCreate, 4);
     }
 
     @ApiOperation(value = "Retorna uma lista de usuarios cadastrados listados pelo id")
