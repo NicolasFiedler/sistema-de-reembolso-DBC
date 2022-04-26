@@ -36,8 +36,10 @@ public class UserService {
 
     public UserDTO save(UserCreateDTO userCreate, Integer role) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
-        userRepository.findByEmail(userCreate.getEmail())
-                .orElseThrow(() -> new BusinessRuleException("Email indisponivel!"));
+        Optional<UserEntity> user =  userRepository.findByEmail(userCreate.getEmail());
+        if (user.isPresent()){
+            throw new BusinessRuleException("Email indisponivel!");
+        }
 
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
 
