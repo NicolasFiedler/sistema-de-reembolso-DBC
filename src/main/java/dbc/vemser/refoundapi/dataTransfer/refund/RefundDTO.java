@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -16,6 +15,7 @@ import java.util.Set;
 @Getter
 public class RefundDTO {
     private Integer idRefund;
+    private String name;
     private String title;
     private Double value;
     private String date;

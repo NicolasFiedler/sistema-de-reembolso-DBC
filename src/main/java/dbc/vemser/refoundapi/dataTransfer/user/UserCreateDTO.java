@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -26,7 +27,5 @@ public class UserCreateDTO {
     @NotNull
     private String password;
 
-    private String image;
-
-    private Set<RoleEntity> roleEntities;
+    private MultipartFile image;
 }

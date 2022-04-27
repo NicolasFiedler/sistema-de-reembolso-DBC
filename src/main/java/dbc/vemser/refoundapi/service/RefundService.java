@@ -110,6 +110,7 @@ public class RefundService {
 
     private RefundDTO prepareDTO (RefundEntity refundEntity) {
         RefundDTO refundDTO = objectMapper.convertValue(refundEntity, RefundDTO.class);
+        refundDTO.setName(userRepository.getById(refundEntity.getIdUser()).getName());
         refundDTO.setItems(refundEntity.getItemEntities().stream()
                 .map(itemEntity -> {
                     ItemDTO itemDTO = objectMapper.convertValue(itemEntity, ItemDTO.class);
