@@ -55,43 +55,17 @@ public class UserService {
         return buildUserDTO(userSaved);
     }
 
-    private UserDTO buildUserDTO(UserEntity user) {
-        return UserDTO.builder()
-                .idUser(user.getIdUser())
-                .name(user.getName())
-                .email(user.getEmail())
-                .roleEntities(user.getRoleEntities())
-                .image(Base64.getEncoder().encodeToString(user.getImage()))
-                .build();
-    }
-
-    private UserEntity setPhoto(UserEntity userEntity, UserCreateDTO userCreate) {
-        try {
-            MultipartFile coverPhoto = userCreate.getImage();
-            if (coverPhoto != null) {
-                userEntity.setImage(coverPhoto.getBytes());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return userEntity;
-    }
-
     //ADMIN
 //    public List<UserDTO> list() {
 //        log.info("Chamada de método:: LIST USER!");
 //        return userRepository.findAll().stream()
-//                .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class))
+//                .map(this::buildUserDTO)
 //                .collect(Collectors.toList());
 //    }
     public Page<UserDTO> listOrderById(Integer requestPage,Integer sizePage) {
         Pageable pageable = PageRequest.of(requestPage, sizePage, Sort.by("idUser").ascending());
         return userRepository.findAll(pageable)
-                .map(userEntity -> {
-                    UserDTO userDTO = objectMapper.convertValue(userEntity, UserDTO.class);
-                    userDTO.setRoleEntities(userEntity.getRoleEntities());
-                    return userDTO;
-                });
+                .map(this::buildUserDTO);
     }
 
     //TODO - aplicar regras no update
@@ -110,8 +84,8 @@ public class UserService {
 //        UserEntity userEntityAtt = userRepository.save(userFound);
 //        return objectMapper.convertValue(userEntityAtt, UserDTO.class);
 //    }
-
     //ADMIN
+
     public UserDTO delete(Integer id) throws Exception {
         log.info("Chamada de método:: DELETE USER!");
         UserEntity userFound = userRepository.findById(id)
@@ -119,10 +93,9 @@ public class UserService {
         userRepository.delete(userFound);
         return objectMapper.convertValue(userFound, UserDTO.class);
     }
-
     public List<UserDTO> findByNameContainingIgnoreCase(String name) throws Exception {
         return userRepository.findByNameContainingIgnoreCase(name).stream()
-                .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class))
+                .map(this::buildUserDTO)
                 .collect(Collectors.toList());
     }
 
@@ -133,6 +106,32 @@ public class UserService {
    public Page<UserDTO> orderByName(Integer requestPage,Integer sizePage){
        Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("name").ascending());
        return userRepository.findAll(pageable)
-               .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class));
+               .map(this::buildUserDTO);
    }
+
+    private UserDTO buildUserDTO(UserEntity user) {
+        UserDTO userDTO = UserDTO.builder()
+                .idUser(user.getIdUser())
+                .name(user.getName())
+                .email(user.getEmail())
+                .roleEntities(user.getRoleEntities())
+                .build();
+
+        if (user.getImage() != null){
+            userDTO.setImage(Base64.getEncoder().encodeToString(user.getImage()));
+        }
+        return userDTO;
+    }
+
+    private UserEntity setPhoto(UserEntity userEntity, UserCreateDTO userCreate) {
+        try {
+            MultipartFile coverPhoto = userCreate.getImage();
+            if (coverPhoto != null) {
+                userEntity.setImage(coverPhoto.getBytes());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return userEntity;
+    }
 }
