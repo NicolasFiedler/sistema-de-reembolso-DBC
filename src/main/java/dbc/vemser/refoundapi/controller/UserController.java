@@ -28,8 +28,8 @@ public class UserController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping("/saveAdmin")
-    public UserDTO saveAdmin(@Valid @RequestBody UserCreateDTO userCreate, @RequestParam Integer role) throws Exception {
+    @PostMapping(value = "/saveAdmin", consumes = {"multipart/form-data"})
+    public UserDTO saveAdmin(@Valid @ModelAttribute UserCreateDTO userCreate, @RequestParam Integer role) throws Exception {
         return userService.save(userCreate, role);
     }
 
@@ -40,8 +40,8 @@ public class UserController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping("/saveUser")
-    public UserDTO save(@Valid @RequestBody UserCreateDTO userCreate) throws Exception {
+    @PostMapping(value = "/saveUser", consumes = {"multipart/form-data"})
+    public UserDTO save(@Valid @ModelAttribute UserCreateDTO userCreate) throws Exception {
         return userService.save(userCreate, 4);
     }
 
@@ -56,16 +56,16 @@ public class UserController {
         return userService.listOrderById(requestPage,sizePage);
     }
 
-    @ApiOperation(value = "Retorna um usuario atualizado")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "update user"),
-            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
-            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
-    })
-    @PutMapping("/updateUser")
-    public UserDTO update(@RequestParam Integer id, @RequestParam(required = false) String password, @RequestParam(required = false) String file) throws Exception {
-        return userService.update(id, password, file);
-    }
+//    @ApiOperation(value = "Retorna um usuario atualizado")
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "update user"),
+//            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+//            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+//    })
+//    @PostMapping("/updateUser")
+//    public UserDTO update(@RequestParam Integer id, @RequestParam(required = false) String password, @RequestParam(required = false) String file) throws Exception {
+//        return userService.update(id, password, file);
+//    }
 
     @ApiOperation(value = "Retorna um usuario deletado")
     @ApiResponses(value = {

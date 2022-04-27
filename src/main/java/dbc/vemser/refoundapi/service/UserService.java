@@ -16,11 +16,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.io.IOException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +41,7 @@ public class UserService {
         }
 
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
+        userEntity = setPhoto(userEntity, userCreate);
 
         Set<RoleEntity> roles = new HashSet<>();
         RoleEntity roleEntity = roleRepository.findById(role)
@@ -52,7 +52,29 @@ public class UserService {
         userEntity.setPassword(new BCryptPasswordEncoder().encode(userCreate.getPassword()));
 
         UserEntity userSaved = userRepository.save(userEntity);
-        return objectMapper.convertValue(userSaved, UserDTO.class);
+        return buildUserDTO(userSaved);
+    }
+
+    private UserDTO buildUserDTO(UserEntity user) {
+        return UserDTO.builder()
+                .idUser(user.getIdUser())
+                .name(user.getName())
+                .email(user.getEmail())
+                .roleEntities(user.getRoleEntities())
+                .image(Base64.getEncoder().encodeToString(user.getImage()))
+                .build();
+    }
+
+    private UserEntity setPhoto(UserEntity userEntity, UserCreateDTO userCreate) {
+        try {
+            MultipartFile coverPhoto = userCreate.getImage();
+            if (coverPhoto != null) {
+                userEntity.setImage(coverPhoto.getBytes());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return userEntity;
     }
 
     //ADMIN
@@ -65,31 +87,29 @@ public class UserService {
     public Page<UserDTO> listOrderById(Integer requestPage,Integer sizePage) {
         Pageable pageable = PageRequest.of(requestPage, sizePage, Sort.by("idUser").ascending());
         return userRepository.findAll(pageable)
-                .map(userEntity -> objectMapper.convertValue(userEntity, UserDTO.class));
+                .map(userEntity -> {
+                    UserDTO userDTO = objectMapper.convertValue(userEntity, UserDTO.class);
+                    userDTO.setRoleEntities(userEntity.getRoleEntities());
+                    return userDTO;
+                });
     }
-
-
-    /*
-        image imagem = ???
-        string var = conversorDeBase64(imagem);
-     */
 
     //TODO - aplicar regras no update
-    public UserDTO update(Integer id, String password, String image) throws Exception {
-        log.info("Chamada de método:: LIST USER!");
-        UserEntity userFound = userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found!"));
-
-        if (!image.isEmpty() && !image.isBlank()){
-            userFound.setImage(image);
-        }
-
-        if (!password.isEmpty() && !password.isBlank()){
-            userFound.setPassword(password);
-        }
-        UserEntity userEntityAtt = userRepository.save(userFound);
-        return objectMapper.convertValue(userEntityAtt, UserDTO.class);
-    }
+//    public UserDTO update(Integer id, String password, String image) throws Exception {
+//        log.info("Chamada de método:: LIST USER!");
+//        UserEntity userFound = userRepository.findById(id)
+//                .orElseThrow(() -> new RuntimeException("User not found!"));
+//
+//        if (!image.isEmpty() && !image.isBlank()){
+//            userFound.setImage(image);
+//        }
+//
+//        if (!password.isEmpty() && !password.isBlank()){
+//            userFound.setPassword(password);
+//        }
+//        UserEntity userEntityAtt = userRepository.save(userFound);
+//        return objectMapper.convertValue(userEntityAtt, UserDTO.class);
+//    }
 
     //ADMIN
     public UserDTO delete(Integer id) throws Exception {

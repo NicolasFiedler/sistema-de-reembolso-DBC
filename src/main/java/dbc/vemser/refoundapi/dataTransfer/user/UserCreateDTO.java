@@ -1,5 +1,6 @@
 package dbc.vemser.refoundapi.dataTransfer.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import dbc.vemser.refoundapi.entity.RoleEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,5 +28,6 @@ public class UserCreateDTO {
     @NotNull
     private String password;
 
+    @JsonIgnore
     private MultipartFile image;
 }

@@ -15,6 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -62,7 +63,7 @@ public class TokenService {
                 .id(user.getIdUser())
                 .name(user.getName())
                 .email(user.getEmail())
-                .image(user.getImage())
+                .image(Base64.getEncoder().encodeToString(user.getImage()))
                 .roles(user.getRoleEntities())
                 .token(PREFIX + token)
                 .build();

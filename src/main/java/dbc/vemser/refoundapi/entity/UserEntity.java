@@ -36,7 +36,7 @@ public class UserEntity implements UserDetails {
     private String password;
 
     @Column(name = "image")
-    private String image;
+    private byte[] image;
 
     @JsonIgnore
     @ManyToMany

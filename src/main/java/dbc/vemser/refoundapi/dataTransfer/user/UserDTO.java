@@ -1,10 +1,7 @@
 package dbc.vemser.refoundapi.dataTransfer.user;
 
 import dbc.vemser.refoundapi.entity.RoleEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -16,8 +13,14 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserDTO extends UserCreateDTO{
+@Builder
+public class UserDTO {
 
     private Integer idUser;
+    private String name;
+    private String email;
+    private String password;
     private Set<RoleEntity> roleEntities;
+    private String image;
+
 }
