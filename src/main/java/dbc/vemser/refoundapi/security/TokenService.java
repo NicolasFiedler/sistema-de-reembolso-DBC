@@ -59,14 +59,19 @@ public class TokenService {
             user = userRepository.findById(user.getIdUser()).get();
         }
 
-        return LogedDTO.builder()
+        LogedDTO logedDTO = LogedDTO.builder()
                 .id(user.getIdUser())
                 .name(user.getName())
                 .email(user.getEmail())
-                .image(Base64.getEncoder().encodeToString(user.getImage()))
                 .roles(user.getRoleEntities())
                 .token(PREFIX + token)
                 .build();
+
+        if (user.getImage() != null) {
+            logedDTO.setImage(Base64.getEncoder().encodeToString(user.getImage()));
+        }
+
+        return logedDTO;
     }
 
     public Authentication getAuthentication(HttpServletRequest request) {
