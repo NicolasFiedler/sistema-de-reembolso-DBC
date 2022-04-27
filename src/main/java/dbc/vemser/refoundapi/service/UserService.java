@@ -33,7 +33,7 @@ public class UserService {
     private final RoleRepository roleRepository;
 
 
-    public UserDTO save(UserCreateDTO userCreate, Integer role) throws Exception {
+    public UserDTO save(UserCreateDTO userCreate, String role) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
         Optional<UserEntity> user =  userRepository.findByEmail(userCreate.getEmail());
         if (user.isPresent()){
@@ -44,7 +44,7 @@ public class UserService {
         userEntity = setPhoto(userEntity, userCreate);
 
         Set<RoleEntity> roles = new HashSet<>();
-        RoleEntity roleEntity = roleRepository.findById(role)
+        RoleEntity roleEntity = roleRepository.findById(Integer.parseInt(role))
                 .orElseThrow(() -> new BusinessRuleException("Role not found!"));
         roles.add(roleEntity);
         userEntity.setRoleEntities(roles);

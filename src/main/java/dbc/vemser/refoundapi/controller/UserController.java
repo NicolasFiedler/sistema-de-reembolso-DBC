@@ -29,7 +29,7 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping(value = "/saveAdmin", consumes = {"multipart/form-data"})
-    public UserDTO saveAdmin(@Valid @ModelAttribute UserCreateDTO userCreate, @RequestParam Integer role) throws Exception {
+    public UserDTO saveAdmin(@Valid @ModelAttribute UserCreateDTO userCreate, @RequestParam String role) throws Exception {
         return userService.save(userCreate, role);
     }
 
@@ -42,7 +42,7 @@ public class UserController {
     })
     @PostMapping(value = "/saveUser", consumes = {"multipart/form-data"})
     public UserDTO save(@Valid @ModelAttribute UserCreateDTO userCreate) throws Exception {
-        return userService.save(userCreate, 4);
+        return userService.save(userCreate, "4");
     }
 
     @ApiOperation(value = "Retorna uma lista de usuarios cadastrados listados pelo id")
