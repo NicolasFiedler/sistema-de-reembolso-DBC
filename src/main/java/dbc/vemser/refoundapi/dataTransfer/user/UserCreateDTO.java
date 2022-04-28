@@ -2,10 +2,7 @@ package dbc.vemser.refoundapi.dataTransfer.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dbc.vemser.refoundapi.entity.RoleEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
@@ -18,6 +15,7 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class UserCreateDTO {
 
     @NotEmpty

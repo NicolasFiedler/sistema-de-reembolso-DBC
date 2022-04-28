@@ -3,6 +3,7 @@ package dbc.vemser.refoundapi.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserUpdateDTO;
 import dbc.vemser.refoundapi.entity.RoleEntity;
 import dbc.vemser.refoundapi.entity.UserEntity;
 import dbc.vemser.refoundapi.exception.BusinessRuleException;
@@ -36,8 +37,8 @@ public class UserService {
 
     public UserDTO save(UserCreateDTO userCreate, String role) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
-        Optional<UserEntity> user =  userRepository.findByEmail(userCreate.getEmail());
-        if (user.isPresent()){
+        Optional<UserEntity> user = userRepository.findByEmail(userCreate.getEmail());
+        if (user.isPresent()) {
             throw new BusinessRuleException("Email indisponivel!");
         }
 
@@ -63,29 +64,54 @@ public class UserService {
 //                .map(this::buildUserDTO)
 //                .collect(Collectors.toList());
 //    }
-    public Page<UserDTO> listOrderById(Integer requestPage,Integer sizePage) {
+    public Page<UserDTO> listOrderById(Integer requestPage, Integer sizePage) {
         Pageable pageable = PageRequest.of(requestPage, sizePage, Sort.by("idUser").ascending());
         return userRepository.findAll(pageable)
                 .map(this::buildUserDTO);
     }
 
-    //TODO - aplicar regras no update
-//    public UserDTO update(Integer id, String password, String image) throws Exception {
-//        log.info("Chamada de método:: LIST USER!");
-//        UserEntity userFound = userRepository.findById(id)
-//                .orElseThrow(() -> new RuntimeException("User not found!"));
-//
-//        if (!image.isEmpty() && !image.isBlank()){
-//            userFound.setImage(image);
-//        }
-//
-//        if (!password.isEmpty() && !password.isBlank()){
-//            userFound.setPassword(password);
-//        }
-//        UserEntity userEntityAtt = userRepository.save(userFound);
-//        return objectMapper.convertValue(userEntityAtt, UserDTO.class);
-//    }
-    //ADMIN
+
+    public UserDTO update(String id, UserUpdateDTO userAtt) throws Exception {
+        log.info("Chamada de método:: UPDATE USER!");
+        UserEntity userFound = userRepository.findById(Integer.parseInt(id))
+                .orElseThrow(() -> new BusinessRuleException("User not found!"));
+
+        if (!userAtt.getImage().isEmpty() && userAtt.getImage() != null) {
+            UserCreateDTO userCreateDTO = UserCreateDTO.builder()
+                    .image(userAtt.getImage())
+                    .build();
+            userFound = setPhoto(userFound, userCreateDTO);
+        }
+        if (!userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
+            userFound.setPassword(userAtt.getPassword());
+        }
+        UserEntity userEntityAtt = userRepository.save(userFound);
+        return buildUserDTO(userEntityAtt);
+    }
+
+    public UserDTO updateAdmin(String id, UserCreateDTO userAtt, String role) throws BusinessRuleException {
+        log.info("Chamada de método:: UPDATE USER!");
+        UserEntity userFound = userRepository.findById(Integer.parseInt(id))
+                .orElseThrow(() -> new BusinessRuleException("User not found!"));
+
+        if (!userAtt.getImage().isEmpty() && userAtt.getImage() != null) {
+            userFound = setPhoto(userFound, userAtt);
+        }
+        userFound.setName(userAtt.getName());
+        userFound.setEmail(userAtt.getEmail());
+
+        Set<RoleEntity> roles = new HashSet<>();
+        RoleEntity roleEntity = roleRepository.findById(Integer.parseInt(role))
+                .orElseThrow(() -> new BusinessRuleException("Role not found!"));
+        roles.add(roleEntity);
+        userFound.setRoleEntities(roles);
+        if (!userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
+            userFound.setPassword(userAtt.getPassword());
+        }
+        UserEntity userEntityAtt = userRepository.save(userFound);
+        return buildUserDTO(userEntityAtt);
+    }
+
 
     public UserDTO delete(Integer id) throws Exception {
         log.info("Chamada de método:: DELETE USER!");
@@ -94,21 +120,22 @@ public class UserService {
         userRepository.delete(userFound);
         return objectMapper.convertValue(userFound, UserDTO.class);
     }
+
     public List<UserDTO> findByNameContainingIgnoreCase(String name) throws Exception {
         return userRepository.findByNameContainingIgnoreCase(name).stream()
                 .map(this::buildUserDTO)
                 .collect(Collectors.toList());
     }
 
-   public Optional<UserEntity> findByEmail (String email){
+    public Optional<UserEntity> findByEmail(String email) {
         return userRepository.findByEmail(email);
-   }
+    }
 
-   public Page<UserDTO> orderByName(Integer requestPage,Integer sizePage){
-       Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("name").ascending());
-       return userRepository.findAll(pageable)
-               .map(this::buildUserDTO);
-   }
+    public Page<UserDTO> orderByName(Integer requestPage, Integer sizePage) {
+        Pageable pageable = PageRequest.of(requestPage, sizePage, Sort.by("name").ascending());
+        return userRepository.findAll(pageable)
+                .map(this::buildUserDTO);
+    }
 
     private UserDTO buildUserDTO(UserEntity user) {
         UserDTO userDTO = UserDTO.builder()
@@ -118,7 +145,7 @@ public class UserService {
                 .roleEntities(user.getRoleEntities())
                 .build();
 
-        if (user.getImage() != null){
+        if (user.getImage() != null) {
             userDTO.setImage(Base64.getEncoder().encodeToString(user.getImage()));
         }
         return userDTO;
