@@ -2,6 +2,8 @@ package dbc.vemser.refoundapi.controller;
 
 import dbc.vemser.refoundapi.dataTransfer.user.UserCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserUpdateDTO;
+import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -45,6 +47,8 @@ public class UserController {
         return userService.save(userCreate, "4");
     }
 
+
+
     @ApiOperation(value = "Retorna uma lista de usuarios cadastrados listados pelo id")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "order list by id users"),
@@ -56,16 +60,27 @@ public class UserController {
         return userService.listOrderById(requestPage,sizePage);
     }
 
-//    @ApiOperation(value = "Retorna um usuario atualizado")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "update user"),
-//            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
-//            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
-//    })
-//    @PostMapping("/updateUser")
-//    public UserDTO update(@RequestParam Integer id, @RequestParam(required = false) String password, @RequestParam(required = false) String file) throws Exception {
-//        return userService.update(id, password, file);
-//    }
+    @ApiOperation(value = "Retorna um usuario atualizado")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "update user"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
+    @PostMapping(value = "/updateUser", consumes = {"multipart/form-data"})
+    public UserDTO update(@Valid @ModelAttribute UserUpdateDTO userAtt, @RequestParam String id) throws Exception {
+        return userService.update(id, userAtt);
+    }
+
+    @ApiOperation(value = "Retorna um usuario atualizado pelo admin")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "update user by admin"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
+    @PostMapping(value = "/updateAdmin", consumes = {"multipart/form-data"})
+    public UserDTO updateAdmin(@Valid @ModelAttribute UserCreateDTO userAtt,@RequestParam String id,@RequestParam String role) throws BusinessRuleException {
+        return userService.updateAdmin(id,userAtt,role);
+    }
 
     @ApiOperation(value = "Retorna um usuario deletado")
     @ApiResponses(value = {
