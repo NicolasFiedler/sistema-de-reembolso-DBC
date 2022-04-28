@@ -22,6 +22,4 @@ public class RefundCreateDTO {
     @NotBlank
     @Size(min = 2, max = 60, message = "o titulo de reembolso deve conter entre 2 a 40 caracteres")
     private String title;
-
-    private Set<ItemCreateDTO> items;
 }

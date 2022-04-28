@@ -2,10 +2,7 @@ package dbc.vemser.refoundapi.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import dbc.vemser.refoundapi.enums.Status;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -15,6 +12,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity(name = "refund")
 public class RefundEntity {
 

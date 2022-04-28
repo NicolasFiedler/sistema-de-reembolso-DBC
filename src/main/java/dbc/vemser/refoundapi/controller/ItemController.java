@@ -25,7 +25,7 @@ public class ItemController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping("/createItem")
+    @PostMapping(value = "/", consumes = {"multipart/form-data"})
     public ItemDTO create(@RequestParam Integer idRefund, @Valid @RequestBody ItemCreateDTO itemCreate) throws Exception {
         return itemService.create(idRefund, itemCreate);
     }
@@ -36,7 +36,7 @@ public class ItemController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PutMapping("/updateItem")
+    @PostMapping(value = "/updateItem", consumes = {"multipart/form-data"})
     public ItemDTO update(Integer id, ItemCreateDTO itemAtt) {
         return itemService.update(id, itemAtt);
     }

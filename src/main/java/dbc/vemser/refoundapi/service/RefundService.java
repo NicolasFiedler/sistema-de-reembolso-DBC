@@ -36,8 +36,6 @@ public class RefundService {
 
     private final RefundRepository refundRepository;
 
-    private final ItemService itemService;
-
     private final ObjectMapper objectMapper;
 
     private final UserRepository userRepository;
@@ -46,10 +44,11 @@ public class RefundService {
 
     private final DateTimeFormatter REFUND_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    public RefundDTO create(Integer idUser, RefundCreateDTO refundCreate) {
+    public Integer create(Integer idUser, RefundCreateDTO refundTitle) {
         log.info("Chamada de método:: CREATE REFUND!");
 
-        RefundEntity refundEntity = objectMapper.convertValue(refundCreate, RefundEntity.class);
+        RefundEntity refundEntity = RefundEntity.builder()
+                .title(refundTitle.getTitle()).build();
         refundEntity.setDate(LocalDateTime.now(ZoneId.of("UTC-03:00")));
         refundEntity.setStatus(Status.ABERTO);
 
@@ -59,28 +58,30 @@ public class RefundService {
 
         RefundEntity refundCreated = refundRepository.save(refundEntity);
 
+        return refundCreated.getIdRefund();
+    }
+
+    public void addItemValue (RefundEntity refundEntity, Double value) {
+        refundEntity.setValue(refundEntity.getValue() + value);
+        refundRepository.save(refundEntity);
+    }
+
+    public void removeItemValue (Integer idRefund, Double value) {
+        RefundEntity refundEntity = refundRepository.getById(idRefund);
+
+        refundEntity.setValue(refundEntity.getValue() - value);
+        refundRepository.save(refundEntity);
+    }
+
+    public void calculeRefundValue (Integer idRefund) {
+        RefundEntity refundEntity = refundRepository.getById(idRefund);
+
         Double sum = 0.;
-        Set<ItemEntity> itemEntitySet = new HashSet<>();
-        for (ItemCreateDTO item : refundCreate.getItems()) {
-            ItemDTO itemDTO = itemService.create(refundCreated.getIdRefund(), item);
-            ItemEntity itemEntity = objectMapper.convertValue(itemDTO, ItemEntity.class);
-            itemEntity.setRefundEntity(refundCreated);
-            itemEntity.setDate(LocalDate.parse(itemDTO.getDateItem(), ITEM_FORMATTER));
-            itemEntitySet.add(itemEntity);
-            sum += item.getValue();
+        for (ItemEntity itemEntity : refundEntity.getItemEntities()) {
+            sum += itemEntity.getValue();
         }
-
-        refundCreated.setValue(sum);
-        refundCreated.setItemEntities(itemEntitySet);
-        refundCreated = refundRepository.save(refundEntity);
-
-        RefundDTO refundDTO = objectMapper.convertValue(refundCreated, RefundDTO.class);
-        refundDTO.setDate(refundCreated.getDate().format(REFUND_FORMATTER));
-        refundDTO.setItems(itemEntitySet.stream()
-                .map(itemEntity -> objectMapper.convertValue(itemEntity, ItemDTO.class))
-                .collect(Collectors.toSet()));
-
-        return refundDTO;
+        refundEntity.setValue(sum);
+        refundRepository.save(refundEntity);
     }
 
     public Page<RefundDTO> list(Integer idUser, Integer requestPage, Integer sizePage) {
@@ -135,7 +136,6 @@ public class RefundService {
                 .orElseThrow(() -> new RuntimeException("Refund not found!"));
         refundFound.setStatus(refundAtt.getStatus());
         refundFound.setTitle(refundAtt.getTitle());
-        refundFound.setValue(refundAtt.getValue());
         RefundEntity refundEntity = refundRepository.save(refundFound);
         return objectMapper.convertValue(refundEntity, RefundDTO.class);
     }

@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class RefundUpdateDTO {
     private String title;
-    private Double value;
     private Status status;
 
 }

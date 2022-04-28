@@ -30,10 +30,10 @@ public class RefundController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping(value = "/", consumes = {"multipart/form-data"})
-    public RefundDTO create(@ModelAttribute RefundCreateDTO refundCreate) {
+    @PostMapping(value = "/")
+    public Integer create(@RequestParam RefundCreateDTO refundTitle) {
         String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return refundService.create(Integer.parseInt(id), refundCreate);
+        return refundService.create(Integer.parseInt(id), refundTitle);
     }
 
     @ApiOperation(value = "Retorna uma lista de reembolsos")
