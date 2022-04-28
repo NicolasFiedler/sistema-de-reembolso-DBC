@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/item")
@@ -47,7 +48,7 @@ public class ItemController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @GetMapping("/listAllItens")
-    public ItemDTO list() {
+    public List<ItemDTO> list() {
         return itemService.list();
     }
 

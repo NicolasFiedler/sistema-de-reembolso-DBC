@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,8 +46,6 @@ public class ItemService {
 
         ItemEntity itemCreated = itemRepository.save(itemEntity);
 
-//        ItemDTO itemDTO = objectMapper.convertValue(itemCreated, ItemDTO.class);
-//        itemDTO.setDateItem(itemCreated.getDate().format(FORMATTER));
         return buildItemDTO(itemCreated);
     }
 
@@ -60,18 +59,17 @@ public class ItemService {
         itemFound.setName(itemAtt.getName());
         itemFound.setDate(LocalDate.parse(itemAtt.getDateItem(), FORMATTER));
         itemFound.setValue(itemAtt.getValue());
+        itemFound = setPhoto(itemFound, itemAtt);
 
         ItemEntity itemEntity = itemRepository.save(itemFound);
 
-        ItemDTO itemDTO = objectMapper.convertValue(itemEntity, ItemDTO.class);
-        itemDTO.setDateItem(itemEntity.getDate().format(FORMATTER));
-        return itemDTO;
+        return buildItemDTO(itemEntity);
     }
 
-    public ItemDTO list() {
+    public List<ItemDTO> list() {
         log.info("Chamada de método:: LIST ITEM!");
-        return (ItemDTO) itemRepository.findAll().stream()
-                .map(itemEntity -> objectMapper.convertValue(itemEntity, ItemDTO.class))
+        return itemRepository.findAll().stream()
+                .map(this::buildItemDTO)
                 .collect(Collectors.toList());
     }
 
@@ -80,20 +78,18 @@ public class ItemService {
         ItemEntity itemFound = itemRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Item not found!"));
         itemRepository.delete(itemFound);
-        return objectMapper.convertValue(itemFound, ItemDTO.class);
+        return buildItemDTO(itemFound);
     }
 
     private ItemDTO buildItemDTO(ItemEntity item){
-        ItemDTO itemDTO = ItemDTO.builder()
+
+        return ItemDTO.builder()
                 .idItem(item.getIdItem())
                 .name(item.getName())
+                .dateItem(item.getDate().format(FORMATTER))
                 .value(item.getValue())
+                .imageString(Base64.getEncoder().encodeToString(item.getImage()))
                 .build();
-
-        if (item.getImage() != null){
-            itemDTO.setImageString(Base64.getEncoder().encodeToString(item.getImage()));
-        }
-        return itemDTO;
     }
 
     private ItemEntity setPhoto(ItemEntity itemEntity, ItemCreateDTO itemCreate){
