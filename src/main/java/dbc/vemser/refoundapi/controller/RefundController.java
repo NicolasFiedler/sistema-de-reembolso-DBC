@@ -31,7 +31,7 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping(value = "/")
-    public Integer create(@RequestParam RefundCreateDTO refundTitle) {
+    public Integer create(@RequestBody RefundCreateDTO refundTitle) {
         String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return refundService.create(Integer.parseInt(id), refundTitle);
     }
