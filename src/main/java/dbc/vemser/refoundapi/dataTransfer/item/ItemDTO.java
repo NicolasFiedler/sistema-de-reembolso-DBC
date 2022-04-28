@@ -1,15 +1,17 @@
 package dbc.vemser.refoundapi.dataTransfer.item;
 
 import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemDTO extends ItemCreateDTO {
+@Builder
+public class ItemDTO {
     private Integer idItem;
+    private String dateItem;
+    private String name;
+    private Double value;
+    private String imageString;
 }

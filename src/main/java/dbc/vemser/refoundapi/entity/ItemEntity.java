@@ -33,7 +33,7 @@ public class ItemEntity {
     private Double value;
 
     @Column(name = "attachment")
-    private String image;
+    private byte[] image;
 
     @Column(name = "id_refund", insertable = false, updatable = false)
     private Integer idRefund;

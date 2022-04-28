@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
+
     private final ObjectMapper objectMapper;
 
     private final RoleRepository roleRepository;

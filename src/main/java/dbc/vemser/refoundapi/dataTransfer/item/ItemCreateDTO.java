@@ -1,9 +1,11 @@
 package dbc.vemser.refoundapi.dataTransfer.item;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotEmpty;
@@ -25,5 +27,7 @@ public class ItemCreateDTO {
     @NotNull
     @DecimalMin(value = "0.01", message = "Não é permitido números negativos.")
     private Double value;
-    private String image;
+
+    @JsonIgnore
+    private MultipartFile image;
 }
