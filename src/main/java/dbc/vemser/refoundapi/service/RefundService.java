@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RefundService {
 
+    private final ItemService itemService;
+
     private final RefundRepository refundRepository;
 
     private final ObjectMapper objectMapper;
@@ -62,7 +64,11 @@ public class RefundService {
     }
 
     public void addItemValue (RefundEntity refundEntity, Double value) {
-        refundEntity.setValue(refundEntity.getValue() + value);
+        if (refundEntity.getValue() == null) {
+            refundEntity.setValue(value);
+        } else {
+            refundEntity.setValue(refundEntity.getValue() + value);
+        }
         refundRepository.save(refundEntity);
     }
 
@@ -114,7 +120,7 @@ public class RefundService {
         refundDTO.setName(userRepository.getById(refundEntity.getIdUser()).getName());
         refundDTO.setItems(refundEntity.getItemEntities().stream()
                 .map(itemEntity -> {
-                    ItemDTO itemDTO = objectMapper.convertValue(itemEntity, ItemDTO.class);
+                    ItemDTO itemDTO = itemService.buildItemDTO(itemEntity);
                     itemDTO.setDateItem(itemEntity.getDate().format(ITEM_FORMATTER));
                     return itemDTO;
                 })

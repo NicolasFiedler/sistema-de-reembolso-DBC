@@ -29,7 +29,8 @@ public class ItemService {
 
     private final RefundRepository refundRepository;
 
-    private final RefundService refundService;
+    @Autowired
+    private RefundService refundService;
 
     private final ObjectMapper objectMapper;
 
@@ -85,7 +86,7 @@ public class ItemService {
         return buildItemDTO(itemFound);
     }
 
-    private ItemDTO buildItemDTO(ItemEntity item){
+    public ItemDTO buildItemDTO(ItemEntity item){
 
         return ItemDTO.builder()
                 .idItem(item.getIdItem())
