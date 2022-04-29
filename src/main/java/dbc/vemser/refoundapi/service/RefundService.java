@@ -1,12 +1,10 @@
 package dbc.vemser.refoundapi.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundUpdateDTO;
-import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.entity.ItemEntity;
 import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.entity.RoleEntity;
@@ -20,13 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -137,13 +131,20 @@ public class RefundService {
     }
 
     //TODO - conferir de quem eh o ticket antes de atualizar
-    public RefundDTO update(Integer id, RefundUpdateDTO refundAtt) throws Exception {
-        RefundEntity refundFound = refundRepository.findById(id)
+    public RefundDTO update (Integer id, RefundUpdateDTO refundAtt, Integer idUser) {
+        RefundEntity refundFounded = refundRepository.findByIdRefundAndIdUserAndStatus(id, idUser, Status.ABERTO)
+                .orElseThrow(() -> new RuntimeException("Invalid operation!"));
+        refundFounded.setTitle(refundAtt.getTitle());
+        RefundEntity refundEntity = refundRepository.save(refundFounded);
+        return prepareDTO(refundEntity);
+    }
+
+    public RefundDTO updateStatus (Integer id, RefundUpdateDTO refundAtt) {
+        RefundEntity refundFounded = refundRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Refund not found!"));
-        refundFound.setStatus(refundAtt.getStatus());
-        refundFound.setTitle(refundAtt.getTitle());
-        RefundEntity refundEntity = refundRepository.save(refundFound);
-        return objectMapper.convertValue(refundEntity, RefundDTO.class);
+        refundFounded.setStatus(Status.ofType(refundAtt.getStatus()));
+        RefundEntity refundEntity = refundRepository.save(refundFounded);
+        return prepareDTO(refundEntity);
     }
 
     public RefundDTO delete(Integer idRefund, Integer idUser) throws BusinessRuleException {

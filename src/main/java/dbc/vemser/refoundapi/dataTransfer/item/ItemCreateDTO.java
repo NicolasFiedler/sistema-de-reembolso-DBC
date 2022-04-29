@@ -29,7 +29,7 @@ public class ItemCreateDTO {
 
     @NotNull
     @DecimalMin(value = "0.01", message = "Não é permitido números negativos.")
-    private Double value;
+    private String value;
 
     @NotNull
     @JsonIgnore

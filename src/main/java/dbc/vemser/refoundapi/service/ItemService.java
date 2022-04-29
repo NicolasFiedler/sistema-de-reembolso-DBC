@@ -39,7 +39,9 @@ public class ItemService {
 
     public ItemDTO create(Integer idRefund, ItemCreateDTO itemCreate) {
         log.info("Chamada de método:: CREATE ITEM!");
-        ItemEntity itemEntity = objectMapper.convertValue(itemCreate, ItemEntity.class);
+        ItemEntity itemEntity = new ItemEntity();
+        itemEntity.setName(itemCreate.getName());
+        itemEntity.setValue(Double.parseDouble(itemCreate.getValue()));
         RefundEntity r = refundRepository.getById(idRefund);
         itemEntity = setPhoto(itemEntity, itemCreate);
         itemEntity.setIdRefund(idRefund);
@@ -52,6 +54,7 @@ public class ItemService {
         return buildItemDTO(itemCreated);
     }
 
+    //TODO - arrumar update
     public ItemDTO update(Integer id, ItemCreateDTO itemAtt) {
         log.info("Chamada de método:: UPDATE ITEM!");
 
@@ -61,7 +64,7 @@ public class ItemService {
 
         itemFound.setName(itemAtt.getName());
         itemFound.setDate(LocalDate.parse(itemAtt.getDateItem(), FORMATTER));
-        itemFound.setValue(itemAtt.getValue());
+        itemFound.setValue(Double.parseDouble(itemAtt.getValue()));
         itemFound = setPhoto(itemFound, itemAtt);
 
         ItemEntity itemEntity = itemRepository.save(itemFound);

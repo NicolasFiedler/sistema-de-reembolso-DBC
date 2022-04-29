@@ -55,8 +55,14 @@ public class RefundController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PutMapping("/")
-    public RefundDTO update(@PathVariable Integer id, RefundUpdateDTO refundAtt) throws Exception {
-        return refundService.update(id, refundAtt);
+    public RefundDTO update(@RequestParam Integer id, @RequestBody RefundUpdateDTO refundAtt) throws Exception {
+        String idUser = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return refundService.update(id, refundAtt, Integer.parseInt(idUser));
+    }
+
+    @PutMapping("/updateStatus")
+    public RefundDTO updateStatus(@RequestParam Integer id, @RequestBody RefundUpdateDTO refundAtt) throws Exception {
+        return refundService.updateStatus(id, refundAtt);
     }
 
     @ApiOperation(value = "Retorna um refund deletado")

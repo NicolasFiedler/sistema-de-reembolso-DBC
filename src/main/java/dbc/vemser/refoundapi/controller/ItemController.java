@@ -25,8 +25,8 @@ public class ItemController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping(value = "/", consumes = {"multipart/form-data"})
-    public ItemDTO create(@RequestParam Integer idRefund, @Valid @ModelAttribute ItemCreateDTO itemCreate) throws Exception {
+    @PostMapping(value = "/{idRefund}", consumes = {"multipart/form-data"})
+    public ItemDTO create(@PathVariable Integer idRefund, @Valid @ModelAttribute ItemCreateDTO itemCreate) throws Exception {
         return itemService.create(idRefund, itemCreate);
     }
 

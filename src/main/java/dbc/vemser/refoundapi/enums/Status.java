@@ -1,19 +1,33 @@
 package dbc.vemser.refoundapi.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import java.util.Arrays;
 
 @Getter
+@AllArgsConstructor
 public enum Status {
-    ABERTO("aberto"),
-    APROVADOG("aprovado-gestor"),
-    REPROVADOG("reprovado-gestor"),
-    REPROVADOF("reprovado-financeiro"),
-    FECHADO("fechado-pago");
+    ABERTO(0, "aberto"),
 
+    APROVADOG(1, "aprovado-gestor"),
+
+    REPROVADOG(2, "reprovado-gestor"),
+
+    REPROVADOF(3, "reprovado-financeiro"),
+
+    FECHADO(4, "fechado-pago");
+
+    private final Integer id;
     private final String name;
 
-    Status(String nome) {
-        this.name = nome;
+
+    public static Status ofType(Integer type) {
+        return Arrays.stream(Status.values())
+                .filter(tp -> tp.getId().equals(type))
+                .findFirst()
+                .get();
     }
 
 }
