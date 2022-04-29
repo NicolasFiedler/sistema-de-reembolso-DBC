@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,8 +68,9 @@ public class UserController {
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
     @PostMapping(value = "/updateUser", consumes = {"multipart/form-data"})
-    public UserDTO update(@Valid @ModelAttribute UserUpdateDTO userAtt, @RequestParam String id) throws Exception {
-        return userService.update(id, userAtt);
+    public UserDTO update(@Valid @ModelAttribute UserUpdateDTO userAtt) throws Exception {
+        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return userService.update(Integer.parseInt(id), userAtt);
     }
 
     @ApiOperation(value = "Retorna um usuario atualizado pelo admin")

@@ -71,19 +71,19 @@ public class UserService {
     }
 
 
-    public UserDTO update(String id, UserUpdateDTO userAtt) throws Exception {
+    public UserDTO update(Integer id, UserUpdateDTO userAtt) throws Exception {
         log.info("Chamada de método:: UPDATE USER!");
-        UserEntity userFound = userRepository.findById(Integer.parseInt(id))
+        UserEntity userFound = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessRuleException("User not found!"));
 
-        if (!userAtt.getImage().isEmpty() && userAtt.getImage() != null) {
+        if (userAtt.getImage() != null && !userAtt.getImage().isEmpty()) {
             UserCreateDTO userCreateDTO = UserCreateDTO.builder()
                     .image(userAtt.getImage())
                     .build();
             userFound = setPhoto(userFound, userCreateDTO);
         }
-        if (!userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
-            userFound.setPassword(userAtt.getPassword());
+        if (userAtt.getPassword() != null && !userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
+            userFound.setPassword(new BCryptPasswordEncoder().encode(userAtt.getPassword()));
         }
         UserEntity userEntityAtt = userRepository.save(userFound);
         return buildUserDTO(userEntityAtt);
@@ -94,8 +94,14 @@ public class UserService {
         UserEntity userFound = userRepository.findById(Integer.parseInt(id))
                 .orElseThrow(() -> new BusinessRuleException("User not found!"));
 
-        if (!userAtt.getImage().isEmpty() && userAtt.getImage() != null) {
-            userFound = setPhoto(userFound, userAtt);
+        if (userAtt.getImage() != null && !userAtt.getImage().isEmpty()) {
+            UserCreateDTO userCreateDTO = UserCreateDTO.builder()
+                    .image(userAtt.getImage())
+                    .build();
+            userFound = setPhoto(userFound, userCreateDTO);
+        }
+        if (userAtt.getPassword() != null && !userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
+            userFound.setPassword(new BCryptPasswordEncoder().encode(userAtt.getPassword()));
         }
         userFound.setName(userAtt.getName());
         userFound.setEmail(userAtt.getEmail());
@@ -105,9 +111,6 @@ public class UserService {
                 .orElseThrow(() -> new BusinessRuleException("Role not found!"));
         roles.add(roleEntity);
         userFound.setRoleEntities(roles);
-        if (!userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
-            userFound.setPassword(userAtt.getPassword());
-        }
         UserEntity userEntityAtt = userRepository.save(userFound);
         return buildUserDTO(userEntityAtt);
     }

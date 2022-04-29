@@ -23,7 +23,7 @@ public class UserCreateDTO {
     private String name;
     @Email
     private String email;
-    @NotNull
+
     private String password;
 
     @JsonIgnore
