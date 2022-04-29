@@ -15,6 +15,7 @@ import dbc.vemser.refoundapi.repository.RefundRepository;
 import dbc.vemser.refoundapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RefundService {
 
-    private final ItemService itemService;
+    @Autowired
+    private ItemService itemService;
 
     private final RefundRepository refundRepository;
 
@@ -82,6 +84,13 @@ public class RefundService {
         }
         refundEntity.setValue(sum);
         refundRepository.save(refundEntity);
+    }
+
+    public RefundDTO getRefundById (Integer id) throws BusinessRuleException {
+        RefundEntity refundFounded = refundRepository.findById(id)
+                .orElseThrow(() -> new BusinessRuleException("Refund not found!"));
+
+        return prepareDTO(refundFounded);
     }
 
     public Page<RefundDTO> list(Integer idUser, Integer requestPage, Integer sizePage) {

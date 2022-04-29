@@ -5,6 +5,7 @@ import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
 import dbc.vemser.refoundapi.entity.ItemEntity;
 import dbc.vemser.refoundapi.entity.RefundEntity;
+import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.repository.ItemRepository;
 import dbc.vemser.refoundapi.repository.RefundRepository;
 import lombok.RequiredArgsConstructor;
@@ -78,6 +79,13 @@ public class ItemService {
         return itemRepository.findAll().stream()
                 .map(this::buildItemDTO)
                 .collect(Collectors.toList());
+    }
+
+    public ItemDTO getItemById (Integer id) throws BusinessRuleException{
+        ItemEntity itemFound = itemRepository.findById(id)
+                .orElseThrow(() -> new BusinessRuleException("Item not found!"));
+
+        return buildItemDTO(itemFound);
     }
 
     public ItemDTO delete(Integer id) {

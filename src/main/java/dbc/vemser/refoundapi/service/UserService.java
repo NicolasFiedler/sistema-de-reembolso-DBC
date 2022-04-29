@@ -70,6 +70,12 @@ public class UserService {
                 .map(this::buildUserDTO);
     }
 
+    public UserDTO getById (Integer id) throws BusinessRuleException {
+        UserEntity userFound = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessRuleException("User not found!"));
+        return buildUserDTO(userFound);
+    }
+
 
     public UserDTO update(Integer id, UserUpdateDTO userAtt) throws Exception {
         log.info("Chamada de método:: UPDATE USER!");

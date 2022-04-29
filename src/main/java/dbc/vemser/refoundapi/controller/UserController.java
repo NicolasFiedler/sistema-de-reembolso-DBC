@@ -48,6 +48,17 @@ public class UserController {
         return userService.save(userCreate, "4");
     }
 
+    @ApiOperation(value = "Retorna uma pessoa")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Get users"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
+    @GetMapping("/{id}")
+    public UserDTO getById(@PathVariable Integer id) throws BusinessRuleException {
+        return userService.getById(id);
+    }
+
 
 
     @ApiOperation(value = "Retorna uma lista de usuarios cadastrados listados pelo id")

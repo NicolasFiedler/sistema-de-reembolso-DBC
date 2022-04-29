@@ -3,6 +3,7 @@ package dbc.vemser.refoundapi.controller;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundDTO;
 import dbc.vemser.refoundapi.dataTransfer.refund.RefundUpdateDTO;
+import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.service.RefundService;
 import io.swagger.annotations.ApiOperation;
@@ -34,6 +35,17 @@ public class RefundController {
     public Integer create(@RequestBody RefundCreateDTO refundTitle) {
         String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return refundService.create(Integer.parseInt(id), refundTitle);
+    }
+
+    @ApiOperation(value = "Retorna um reembolso")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Get reembolso"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
+    @GetMapping("/{id}")
+    public RefundDTO getById(@PathVariable Integer id) throws BusinessRuleException {
+        return refundService.getRefundById(id);
     }
 
     @ApiOperation(value = "Retorna uma lista de reembolsos")
