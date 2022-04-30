@@ -38,12 +38,12 @@ public class UserService {
     public UserDTO save(UserCreateDTO userCreate, String role) throws Exception {
         log.info("Chamada de método:: SAVE USER!");
         Optional<UserEntity> user = userRepository.findByEmail(userCreate.getEmail());
-        if (user.isPresent()) {
-            throw new BusinessRuleException("Email indisponivel!");
+        if (user != null) {
+            throw new BusinessRuleException("Email already exists!");
         }
 
         UserEntity userEntity = objectMapper.convertValue(userCreate, UserEntity.class);
-        userEntity = setPhoto(userEntity, userCreate);
+        setPhoto(userEntity, userCreate);
 
         Set<RoleEntity> roles = new HashSet<>();
         RoleEntity roleEntity = roleRepository.findById(Integer.parseInt(role))
@@ -86,7 +86,7 @@ public class UserService {
             UserCreateDTO userCreateDTO = UserCreateDTO.builder()
                     .image(userAtt.getImage())
                     .build();
-            userFound = setPhoto(userFound, userCreateDTO);
+            setPhoto(userFound, userCreateDTO);
         }
         if (userAtt.getPassword() != null && !userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
             userFound.setPassword(new BCryptPasswordEncoder().encode(userAtt.getPassword()));
@@ -104,7 +104,7 @@ public class UserService {
             UserCreateDTO userCreateDTO = UserCreateDTO.builder()
                     .image(userAtt.getImage())
                     .build();
-            userFound = setPhoto(userFound, userCreateDTO);
+            setPhoto(userFound, userCreateDTO);
         }
         if (userAtt.getPassword() != null && !userAtt.getPassword().isEmpty() && !userAtt.getPassword().isBlank()) {
             userFound.setPassword(new BCryptPasswordEncoder().encode(userAtt.getPassword()));
@@ -160,7 +160,7 @@ public class UserService {
         return userDTO;
     }
 
-    private UserEntity setPhoto(UserEntity userEntity, UserCreateDTO userCreate) {
+    private void setPhoto(UserEntity userEntity, UserCreateDTO userCreate) {
         try {
             MultipartFile coverPhoto = userCreate.getImage();
             if (coverPhoto != null) {
@@ -169,6 +169,5 @@ public class UserService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return userEntity;
     }
 }
