@@ -210,15 +210,15 @@ public class RefundService {
         refundFounded.setStatus(Status.ofType(refundAtt.getStatus()));
         RefundEntity refundEntity = refundRepository.save(refundFounded);
 
-        switch (refundEntity.getStatus()){
-            case APROVADOG -> userRepository.findByRoleEntities_IdRole(2)
-                        .forEach(userEntity -> emailService.sendEmail(userEntity.getEmail(), refundEntity));
-
-            case REPROVADOG, REPROVADOF, FECHADO -> {
-                UserEntity user = userRepository.getById(refundEntity.getIdUser());
-                emailService.sendEmail(user.getEmail(), refundEntity);
-            }
-        }
+//        switch (refundEntity.getStatus()){
+//            case APROVADOG -> userRepository.findByRoleEntities_IdRole(2)
+//                        .forEach(userEntity -> emailService.sendEmail(userEntity.getEmail(), refundEntity));
+//
+//            case REPROVADOG, REPROVADOF, FECHADO -> {
+//                UserEntity user = userRepository.getById(refundEntity.getIdUser());
+//                emailService.sendEmail(user.getEmail(), refundEntity);
+//            }
+//        }
 
         return prepareDTO(refundEntity);
     }

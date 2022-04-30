@@ -29,35 +29,6 @@ public class EmailService {
     private String FROM;
     private final JavaMailSender emailSender;
 
-//    public void sendSimpleMessage(String mensagemText, String email) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setFrom(from);
-//        message.setTo(email);
-//        message.setSubject("TESTE");
-//        message.setText(mensagemText);
-//        emailSender.send(message);
-//    }
-
-//    public void sendWithAttachment() throws MessagingException {
-//        MimeMessage message = emailSender.createMimeMessage();
-//
-//        MimeMessageHelper helper = new MimeMessageHelper(message,
-//                true);
-//
-//        helper.setFrom(from);
-//        helper.setTo(MAIL_TO);
-//        helper.setSubject("TESTE");
-//        helper.setText("Teste\n minha mensagem \n\nAtt,\nEu.");
-//
-//        File file1 = new File("imagem.jpg");
-//
-//        FileSystemResource file
-//                = new FileSystemResource(file1);
-//        helper.addAttachment(file1.getName(), file);
-//
-//        emailSender.send(message);
-//    }
-
     public void sendEmail(String to, RefundEntity refundEntity) {
         MimeMessage mimeMessage = emailSender.createMimeMessage();
         try {
