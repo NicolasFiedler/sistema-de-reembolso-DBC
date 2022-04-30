@@ -41,6 +41,8 @@ public class RefundService {
 
     private final UserRepository userRepository;
 
+    private final EmailService emailService;
+
     private final DateTimeFormatter ITEM_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     private final DateTimeFormatter REFUND_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
@@ -59,6 +61,14 @@ public class RefundService {
         refundEntity.setIdUser(idUser);
 
         RefundEntity refundCreated = refundRepository.save(refundEntity);
+
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                emailService.sendEmail(u.getEmail(), refundCreated);
+
+            }
+        }).start();
 
         return refundCreated.getIdRefund();
     }

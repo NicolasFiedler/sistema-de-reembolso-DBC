@@ -56,7 +56,6 @@ public class ItemService {
         return buildItemDTO(itemCreated);
     }
 
-    //TODO - arrumar update
     public ItemDTO update(Integer id, ItemUpdateDTO itemAtt) {
         log.info("Chamada de método:: UPDATE ITEM!");
 
