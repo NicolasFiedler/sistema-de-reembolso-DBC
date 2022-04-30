@@ -14,7 +14,6 @@ public interface UserRepository extends JpaRepository<UserEntity, Integer> {
 
     Optional<UserEntity> findByEmail (String email);
 
-    @Query("SELECT u FROM users u join fetch u.persons pe WHERE pe.idPerson = :id")
-    List<UserEntity> findByRole(Integer idRole);
+    List<UserEntity> findByRoleEntities_IdRole(Integer idRole);
 
 }

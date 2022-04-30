@@ -110,7 +110,7 @@ a[x-apple-data-detectors] {
                      </tr>
                      <tr>
                       <td align="left" style="padding:0;Margin:0;padding-top:10px;padding-bottom:10px">
-                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:32px;color:#333333;font-size:16px">A solicitação de reembolso "${title}" no valor de R$ ${value} foi aberta e aguarda aprovação.</p>
+                        <p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, 'helvetica neue', helvetica, sans-serif;line-height:32px;color:#333333;font-size:16px">A solicitação de reembolso "${title}" foi aberta e aguarda aprovação.</p>
                       </td>
                      </tr>
                    </table></td>

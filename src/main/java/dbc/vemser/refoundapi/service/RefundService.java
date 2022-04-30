@@ -62,13 +62,24 @@ public class RefundService {
 
         RefundEntity refundCreated = refundRepository.save(refundEntity);
 
-        new Thread(new Runnable(){
-            @Override
-            public void run() {
-                emailService.sendEmail(u.getEmail(), refundCreated);
+        emailService.sendEmail(u.getEmail(), refundCreated);
+        List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(3);
+        for (UserEntity user : userEntityList) {
+            emailService.sendEmail(user.getEmail(), refundCreated);
+            log.info("Email Enviado para gestor");
+        }
 
-            }
-        }).start();
+//        new Thread(new Runnable(){
+//            @Override
+//            public void run() {
+//                emailService.sendEmail(u.getEmail(), refundCreated);
+//                List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(3);
+//                for (UserEntity user : userEntityList) {
+//                    emailService.sendEmail(user.getEmail(), refundCreated);
+//                    System.out.println(" foi");
+//                }
+//            }
+//        }).start();
 
         return refundCreated.getIdRefund();
     }
@@ -199,14 +210,15 @@ public class RefundService {
         refundFounded.setStatus(Status.ofType(refundAtt.getStatus()));
         RefundEntity refundEntity = refundRepository.save(refundFounded);
 
-//        switch (refundEntity.getStatus()){
-//            case APROVADOG -> {
-//
-//            };
-//            case REPROVADOG -> //manda email;
-//            case REPROVADOF -> //manda email;
-//            case FECHADO -> //manda email;
-//        }
+        switch (refundEntity.getStatus()){
+            case APROVADOG -> userRepository.findByRoleEntities_IdRole(2)
+                        .forEach(userEntity -> emailService.sendEmail(userEntity.getEmail(), refundEntity));
+
+            case REPROVADOG, REPROVADOF, FECHADO -> {
+                UserEntity user = userRepository.getById(refundEntity.getIdUser());
+                emailService.sendEmail(user.getEmail(), refundEntity);
+            }
+        }
 
         return prepareDTO(refundEntity);
     }
