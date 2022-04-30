@@ -1,7 +1,7 @@
 package dbc.vemser.refoundapi.controller;
 
-import dbc.vemser.refoundapi.dataTransfer.AuthDTO;
-import dbc.vemser.refoundapi.dataTransfer.LogedDTO;
+import dbc.vemser.refoundapi.dataTransfer.auth.AuthDTO;
+import dbc.vemser.refoundapi.dataTransfer.auth.LogedDTO;
 import dbc.vemser.refoundapi.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

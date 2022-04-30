@@ -1,6 +1,6 @@
 package dbc.vemser.refoundapi.security;
 
-import dbc.vemser.refoundapi.dataTransfer.LogedDTO;
+import dbc.vemser.refoundapi.dataTransfer.auth.LogedDTO;
 import dbc.vemser.refoundapi.entity.UserEntity;
 import dbc.vemser.refoundapi.repository.UserRepository;
 import io.jsonwebtoken.Claims;

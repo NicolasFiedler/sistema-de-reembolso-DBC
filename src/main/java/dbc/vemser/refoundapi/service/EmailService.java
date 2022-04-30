@@ -1,6 +1,7 @@
 package dbc.vemser.refoundapi.service;
 
 
+import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.FileSystemResource;
@@ -12,11 +13,13 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
+import java.io.IOException;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-
+//
 //    private final freemarker.template.Configuration fmConfiguration;
 //
 //    private static final String MAIL_TO = "flavio.sobrinho@dbccompany.com.br";
@@ -53,7 +56,7 @@ public class EmailService {
 //
 //        emailSender.send(message);
 //    }
-
+//
 //    public void sendEmail(PessoaDTO pessoaDTO, String assunto, String templateName) {
 //        MimeMessage mimeMessage = emailSender.createMimeMessage();
 //        try {
@@ -63,14 +66,14 @@ public class EmailService {
 //            mimeMessageHelper.setFrom(from);
 //            mimeMessageHelper.setTo(pessoaDTO.getEmail());
 //            mimeMessageHelper.setSubject(assunto);
-//            mimeMessageHelper.setText(geContentFromTemplate(pessoaDTO, templateName), true);
+//            mimeMessageHelper.setText(getContentFromTemplate(pessoaDTO, templateName), true);
 //            emailSender.send(mimeMessageHelper.getMimeMessage());
 //        } catch (MessagingException | IOException | TemplateException e) {
 //            e.printStackTrace();
 //        }
 //    }
 //
-//    public String geContentFromTemplate(PessoaDTO pessoaDTO, String templateName) throws IOException, TemplateException {
+//    public String getContentFromTemplate(PessoaDTO pessoaDTO, String templateName) throws IOException, TemplateException {
 //        Map<String, Object> dados = new HashMap<>();
 //        dados.put("nome", pessoaDTO.getNome());
 //        dados.put("id", pessoaDTO.getIdPessoa());

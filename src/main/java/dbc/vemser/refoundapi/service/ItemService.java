@@ -3,6 +3,7 @@ package dbc.vemser.refoundapi.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
+import dbc.vemser.refoundapi.dataTransfer.item.ItemUpdateDTO;
 import dbc.vemser.refoundapi.entity.ItemEntity;
 import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.exception.BusinessRuleException;
@@ -56,7 +57,7 @@ public class ItemService {
     }
 
     //TODO - arrumar update
-    public ItemDTO update(Integer id, ItemCreateDTO itemAtt) {
+    public ItemDTO update(Integer id, ItemUpdateDTO itemAtt) {
         log.info("Chamada de método:: UPDATE ITEM!");
 
         ItemEntity itemFound = itemRepository.findById(id)
@@ -66,7 +67,12 @@ public class ItemService {
         itemFound.setName(itemAtt.getName());
         itemFound.setDate(LocalDate.parse(itemAtt.getDateItem(), FORMATTER));
         itemFound.setValue(Double.parseDouble(itemAtt.getValue()));
-        itemFound = setPhoto(itemFound, itemAtt);
+
+        if (itemAtt.getImage() != null) {
+            ItemCreateDTO itemCreateDTO = new ItemCreateDTO();
+            itemCreateDTO.setImage(itemAtt.getImage());
+            itemFound = setPhoto(itemFound, itemCreateDTO);
+        }
 
         ItemEntity itemEntity = itemRepository.save(itemFound);
         refundService.calculeRefundValue(itemFound.getIdRefund());

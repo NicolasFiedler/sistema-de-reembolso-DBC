@@ -15,5 +15,4 @@ public interface RefundRepository extends JpaRepository<RefundEntity, Integer> {
 
     Optional<RefundEntity> findByIdRefundAndIdUserAndStatus(Integer idRefund, Integer idUser, Status aberto);
 
-    Optional<RefundEntity> findByIdRefundAndIdUser(Integer id, Integer idUser);
 }

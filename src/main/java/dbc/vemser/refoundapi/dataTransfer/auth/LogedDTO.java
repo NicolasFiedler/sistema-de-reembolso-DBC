@@ -1,4 +1,4 @@
-package dbc.vemser.refoundapi.dataTransfer;
+package dbc.vemser.refoundapi.dataTransfer.auth;
 
 import dbc.vemser.refoundapi.entity.RoleEntity;
 import lombok.*;

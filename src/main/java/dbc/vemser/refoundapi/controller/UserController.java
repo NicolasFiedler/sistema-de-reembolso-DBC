@@ -90,8 +90,8 @@ public class UserController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping(value = "/updateAdmin", consumes = {"multipart/form-data"})
-    public UserDTO updateAdmin(@Valid @ModelAttribute UserCreateDTO userAtt,@RequestParam String id,@RequestParam String role) throws BusinessRuleException {
+    @PostMapping(value = "/updateAdmin/{id}", consumes = {"multipart/form-data"})
+    public UserDTO updateAdmin(@Valid @ModelAttribute UserCreateDTO userAtt,@PathVariable String id,@RequestParam String role) throws BusinessRuleException {
         return userService.updateAdmin(id,userAtt,role);
     }
 

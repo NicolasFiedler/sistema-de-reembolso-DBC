@@ -37,6 +37,18 @@ public class RefundController {
         return refundService.create(Integer.parseInt(id), refundTitle);
     }
 
+    @ApiOperation(value = "Retorna uma lista de reembolsos")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "list all Refunds"),
+            @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
+            @ApiResponse(code = 500, message = "Foi gerada uma exceção")
+    })
+    @GetMapping("/findByUserName")
+    public Page<RefundDTO> findByUserName(@RequestParam String name, @RequestParam Integer page, @RequestParam Integer size) {
+        String id = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return refundService.findByName(Integer.parseInt(id), name, page, size);
+    }
+
     @ApiOperation(value = "Retorna um reembolso")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Get reembolso"),

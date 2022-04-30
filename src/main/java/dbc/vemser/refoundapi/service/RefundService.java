@@ -22,6 +22,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +45,7 @@ public class RefundService {
 
     private final DateTimeFormatter REFUND_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
+    //TODO - mandar email pro gestor
     public Integer create(Integer idUser, RefundCreateDTO refundTitle) {
         log.info("Chamada de método:: CREATE REFUND!");
 
@@ -106,19 +110,51 @@ public class RefundService {
             case 2 -> refundRepository.findByStatus(Status.APROVADOG, pageable)
                     .map(this::prepareDTO);
 
-            case 3 -> refundRepository.findByStatus(Status.ABERTO, pageable)//.stream()
+            case 3 -> refundRepository.findByStatus(Status.ABERTO, pageable)
                     .map(this::prepareDTO);
 
             case 4 -> new PageImpl<> (userEntity.getRefundEntities().stream()
                     .map(this::prepareDTO)
                     .collect(Collectors.toList()), pageable, userEntity.getRefundEntities().stream()
-                    .map(this::prepareDTO).toList().size());
+                        .map(this::prepareDTO).toList().size());
 
             default -> null;
         };
     }
 
-    private RefundDTO prepareDTO (RefundEntity refundEntity) {
+    public Page<RefundDTO> findByName(Integer idUser, String name, Integer requestPage, Integer sizePage) {
+        log.info("Chamada de método:: List Refund!");
+
+        UserEntity user = userRepository.getById(idUser);
+        List<UserEntity> userEntityList = userRepository.findByNameContainingIgnoreCase(name);
+        Pageable pageable = PageRequest.of(requestPage, sizePage, Sort.by("status").ascending().and(Sort.by("date").descending()));
+
+        Set<RefundEntity> refundEntityList = new HashSet<>();
+
+        switch (roleToNumeric(user)) {
+            case 1 -> userEntityList.forEach(userEntity -> refundEntityList.addAll(userEntity.getRefundEntities()));
+
+            case 2 -> userEntityList.forEach(userEntity -> refundEntityList.addAll(userEntity.getRefundEntities().stream()
+                    .filter(refundEntity -> refundEntity.getStatus().equals(Status.APROVADOG))
+                    .collect(Collectors.toSet())));
+
+            case 3 -> userEntityList.forEach(userEntity -> refundEntityList.addAll(userEntity.getRefundEntities().stream()
+                    .filter(refundEntity -> refundEntity.getStatus().equals(Status.ABERTO))
+                    .collect(Collectors.toSet())));
+
+            default -> {
+                return null;
+            }
+        }
+        return new PageImpl<> (refundEntityList
+                    .stream()
+                    .map(this::prepareDTO)
+                    .collect(Collectors.toList()),
+                pageable,
+                refundEntityList.size());
+    }
+
+        private RefundDTO prepareDTO (RefundEntity refundEntity) {
         RefundDTO refundDTO = objectMapper.convertValue(refundEntity, RefundDTO.class);
         refundDTO.setName(userRepository.getById(refundEntity.getIdUser()).getName());
         refundDTO.setItems(refundEntity.getItemEntities().stream()
@@ -139,7 +175,6 @@ public class RefundService {
         return 0;
     }
 
-    //TODO - conferir de quem eh o ticket antes de atualizar
     public RefundDTO update (Integer id, RefundUpdateDTO refundAtt, Integer idUser) {
         RefundEntity refundFounded = refundRepository.findByIdRefundAndIdUserAndStatus(id, idUser, Status.ABERTO)
                 .orElseThrow(() -> new RuntimeException("Invalid operation!"));
@@ -153,6 +188,16 @@ public class RefundService {
                 .orElseThrow(() -> new RuntimeException("Refund not found!"));
         refundFounded.setStatus(Status.ofType(refundAtt.getStatus()));
         RefundEntity refundEntity = refundRepository.save(refundFounded);
+
+//        switch (refundEntity.getStatus()){
+//            case APROVADOG -> {
+//
+//            };
+//            case REPROVADOG -> //manda email;
+//            case REPROVADOF -> //manda email;
+//            case FECHADO -> //manda email;
+//        }
+
         return prepareDTO(refundEntity);
     }
 

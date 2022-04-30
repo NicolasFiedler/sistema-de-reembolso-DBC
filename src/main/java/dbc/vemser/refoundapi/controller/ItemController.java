@@ -2,6 +2,7 @@ package dbc.vemser.refoundapi.controller;
 
 import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
+import dbc.vemser.refoundapi.dataTransfer.item.ItemUpdateDTO;
 import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.service.ItemService;
@@ -49,8 +50,8 @@ public class ItemController {
             @ApiResponse(code = 403, message = "Você não tem permissão para acessar este recurso"),
             @ApiResponse(code = 500, message = "Foi gerada uma exceção")
     })
-    @PostMapping(value = "/updateItem", consumes = {"multipart/form-data"})
-    public ItemDTO update(Integer id, ItemCreateDTO itemAtt) {
+    @PostMapping(value = "/updateItem/{id}", consumes = {"multipart/form-data"})
+    public ItemDTO update(@PathVariable Integer id, @Valid @ModelAttribute ItemUpdateDTO itemAtt) {
         return itemService.update(id, itemAtt);
     }
 

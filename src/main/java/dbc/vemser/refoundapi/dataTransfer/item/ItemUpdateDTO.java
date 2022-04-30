@@ -12,13 +12,11 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ItemCreateDTO {
-
+public class ItemUpdateDTO {
     @NotEmpty
     @NotNull
     @Size(min = 2, max = 60, message = "o nome deve conter entre 2 a 60 caracteres")
@@ -32,7 +30,6 @@ public class ItemCreateDTO {
     @DecimalMin(value = "0.01", message = "Não é permitido números negativos.")
     private String value;
 
-    @NotNull
     @JsonIgnore
     private MultipartFile image;
 }
