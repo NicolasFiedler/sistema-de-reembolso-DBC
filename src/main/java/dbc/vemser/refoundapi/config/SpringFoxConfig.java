@@ -27,22 +27,18 @@ public class SpringFoxConfig {
                 .apis(RequestHandlerSelectors.basePackage("dbc.vemser.refoundapi"))
                 .paths(PathSelectors.any())
                 .build()
-                .useDefaultResponseMessages(false);
-//                .apiInfo(apiInfo());
+                .useDefaultResponseMessages(false)
+                .apiInfo(apiInfo());
     }
 
-//    private ApiInfo apiInfo() {
-//        return new ApiInfoBuilder()
-//                .title("Vakinha REST API")
-//                .description("Um exemplo de aplicação Spring Boot REST API")
-//                .version("1.0.0")
-//                .license("Apache License Version 2.0")
-//                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
-//                .contact(new Contact("Nicolas", "https://www.dbccompany.com.br/", "nicolas.fiedler@dbccompany.com.br"))
-//                .contact(new Contact("Ana", "https://www.dbccompany.com.br/", "ana.gocthel@dbccompany.com.br"))
-//                .contact(new Contact("Gabriel", "https://www.dbccompany.com.br/", "gabriel.poersch@dbccompany.com.br"))
-//                .build();
-//    }
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("Sistema de Reembolso DBC")
+                .version("1.0.0")
+                .license("Apache License Version 2.0")
+                .licenseUrl("https://www.apache.org/licenses/LICENSE-2.0")
+                .build();
+    }
     private ApiKey apiKey() {
         return new ApiKey("Autorização", "Authorization", "header");
     }
