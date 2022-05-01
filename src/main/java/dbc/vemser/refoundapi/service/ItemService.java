@@ -31,7 +31,8 @@ public class ItemService {
 
     private final RefundRepository refundRepository;
 
-    private final RefundService refundService;
+    @Autowired
+    private RefundService refundService;
 
     private final ObjectMapper objectMapper;
 

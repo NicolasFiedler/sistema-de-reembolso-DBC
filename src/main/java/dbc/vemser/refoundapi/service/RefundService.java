@@ -47,7 +47,6 @@ public class RefundService {
 
     private final DateTimeFormatter REFUND_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
-    //TODO - mandar email pro gestor
     public Integer create(Integer idUser, RefundCreateDTO refundTitle) {
         log.info("Chamada de método:: CREATE REFUND!");
 
@@ -62,24 +61,30 @@ public class RefundService {
 
         RefundEntity refundCreated = refundRepository.save(refundEntity);
 
-        emailService.sendEmail(u.getEmail(), refundCreated);
-        List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(3);
-        for (UserEntity user : userEntityList) {
-            emailService.sendEmail(user.getEmail(), refundCreated);
-            log.info("Email Enviado para gestor");
-        }
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                List<UserEntity> userEntity = userRepository.findByIdUser(refundCreated.getIdUser());
+                for (UserEntity user : userEntity) {
+                    try{
+                        emailService.sendEmail(user.getEmail(), refundCreated);
+                        log.info("Email Enviado para colaborador: "+ user.getName());
+                    }catch (Exception e) {
+                        log.error("falha ao enviar email para colaborador: "+ user.getName());
+                    }
+                }
 
-//        new Thread(new Runnable(){
-//            @Override
-//            public void run() {
-//                emailService.sendEmail(u.getEmail(), refundCreated);
-//                List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(3);
-//                for (UserEntity user : userEntityList) {
-//                    emailService.sendEmail(user.getEmail(), refundCreated);
-//                    System.out.println(" foi");
-//                }
-//            }
-//        }).start();
+                List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(3);
+                for (UserEntity user : userEntityList) {
+                    try{
+                        emailService.sendEmail(user.getEmail(), refundCreated);
+                        log.info("Email Enviado para gestor: "+ user.getName());
+                    }catch (Exception e) {
+                        log.error("falha ao enviar email para gestor: "+ user.getName());
+                    }
+                }
+            }
+        }).start();
 
         return refundCreated.getIdRefund();
     }
@@ -134,10 +139,8 @@ public class RefundService {
             case 3 -> refundRepository.findByStatus(Status.ABERTO, pageable)
                     .map(this::prepareDTO);
 
-            case 4 -> new PageImpl<> (userEntity.getRefundEntities().stream()
-                    .map(this::prepareDTO)
-                    .collect(Collectors.toList()), pageable, userEntity.getRefundEntities().stream()
-                        .map(this::prepareDTO).toList().size());
+            case 4 -> refundRepository.findByIdUser(userEntity.getIdUser(), pageable)
+                    .map(this::prepareDTO);
 
             default -> null;
         };
@@ -210,15 +213,39 @@ public class RefundService {
         refundFounded.setStatus(Status.ofType(refundAtt.getStatus()));
         RefundEntity refundEntity = refundRepository.save(refundFounded);
 
-//        switch (refundEntity.getStatus()){
-//            case APROVADOG -> userRepository.findByRoleEntities_IdRole(2)
-//                        .forEach(userEntity -> emailService.sendEmail(userEntity.getEmail(), refundEntity));
-//
-//            case REPROVADOG, REPROVADOF, FECHADO -> {
-//                UserEntity user = userRepository.getById(refundEntity.getIdUser());
-//                emailService.sendEmail(user.getEmail(), refundEntity);
-//            }
-//        }
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+
+                switch (refundEntity.getStatus()){
+                    case APROVADOG -> {
+                        List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(2);
+                        for (UserEntity user : userEntityList) {
+                            try{
+                                emailService.sendEmail(user.getEmail(), refundEntity);
+                                log.info("Email Enviado para financeiro");
+                            }catch (Exception e) {
+                                log.error("falha ao enviar email para financeiro!");
+                            }
+                        }
+                    }
+                    case REPROVADOG, REPROVADOF, FECHADO -> {
+                        List<UserEntity> userEntity = userRepository.findByIdUser(refundEntity.getIdUser());
+
+                        for (UserEntity user : userEntity) {
+                            try{
+                                emailService.sendEmail(user.getEmail(), refundEntity);
+                                log.info("Email Enviado para colaborador: "+ user.getName());
+                            }catch (Exception e) {
+                                log.error("falha ao enviar email para colaborador: "+ user.getName());
+                            }
+                        }
+
+                    }
+                }
+
+            }
+        }).start();
 
         return prepareDTO(refundEntity);
     }

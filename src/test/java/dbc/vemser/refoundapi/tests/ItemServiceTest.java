@@ -37,8 +37,7 @@ public class ItemServiceTest {
     @Mock
     private RefundRepository refundRepository;
 
-    @Mock
-    private RefundService refundService;
+//TODO - teste de lista
 
     private static final Integer ID = 2;
 
@@ -49,21 +48,6 @@ public class ItemServiceTest {
         ReflectionTestUtils.setField(itemService, "objectMapper", objectMapper);
     }
 
-    @Test
-    public void deveTestarItemCriadoComSucesso() throws Exception {
-        when(refundRepository.getById(anyInt())).thenReturn(new RefundEntity());
-        when(itemRepository.save(any())).thenReturn(getMockItemEntity());
-
-        Assert.assertNotNull(itemService.create(ID, getMockItemCeateDTO()));
-    }
-
-    @Test
-    public void deveTestarItemUpdateComSucesso() {
-        when(itemRepository.findById(anyInt())).thenReturn(Optional.of(new ItemEntity()));
-        when(itemRepository.save(any())).thenReturn(getMockItemEntity());
-
-        Assert.assertNotNull(itemService.update(ID, getMockItemUpdateDTO()));
-    }
 
     @Test
     public void deveTestarPegarItemPeloId() throws BusinessRuleException {
