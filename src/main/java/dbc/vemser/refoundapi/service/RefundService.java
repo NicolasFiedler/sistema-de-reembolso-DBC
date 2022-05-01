@@ -252,6 +252,19 @@ public class RefundService {
 
     public RefundDTO delete(Integer idRefund, Integer idUser) throws BusinessRuleException {
 
+        UserEntity usersEntity = userRepository.getById(idUser);
+
+        for (RoleEntity roleEntity : usersEntity.getRoleEntities()) {
+            if (roleEntity.getRole().equals("ROLE_ADMIN")){
+                RefundEntity refundFounded = refundRepository.findByIdRefundAndStatus(idRefund, Status.ABERTO)
+                        .orElseThrow(() -> new BusinessRuleException("Invalid operation"));
+                RefundDTO refundDTO = prepareDTO(refundFounded);
+
+                refundRepository.delete(refundFounded);
+                return refundDTO;
+            }
+        }
+
         RefundEntity refundFounded = refundRepository.findByIdRefundAndIdUserAndStatus(idRefund, idUser, Status.ABERTO)
                 .orElseThrow(() -> new BusinessRuleException("Invalid operation"));
         RefundDTO refundDTO = prepareDTO(refundFounded);
