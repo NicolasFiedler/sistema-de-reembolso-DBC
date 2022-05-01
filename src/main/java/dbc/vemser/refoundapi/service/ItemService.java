@@ -31,8 +31,7 @@ public class ItemService {
 
     private final RefundRepository refundRepository;
 
-    @Autowired
-    private RefundService refundService;
+    private final RefundService refundService;
 
     private final ObjectMapper objectMapper;
 
@@ -45,7 +44,7 @@ public class ItemService {
         itemEntity.setName(itemCreate.getName());
         itemEntity.setValue(Double.parseDouble(itemCreate.getValue()));
         RefundEntity r = refundRepository.getById(idRefund);
-        itemEntity = setPhoto(itemEntity, itemCreate);
+        setPhoto(itemEntity, itemCreate);
         itemEntity.setIdRefund(idRefund);
         itemEntity.setRefundEntity(r);
         itemEntity.setDate(LocalDate.parse(itemCreate.getDateItem(), FORMATTER));
@@ -70,7 +69,7 @@ public class ItemService {
         if (itemAtt.getImage() != null) {
             ItemCreateDTO itemCreateDTO = new ItemCreateDTO();
             itemCreateDTO.setImage(itemAtt.getImage());
-            itemFound = setPhoto(itemFound, itemCreateDTO);
+            setPhoto(itemFound, itemCreateDTO);
         }
 
         ItemEntity itemEntity = itemRepository.save(itemFound);
@@ -113,7 +112,7 @@ public class ItemService {
                 .build();
     }
 
-    private ItemEntity setPhoto(ItemEntity itemEntity, ItemCreateDTO itemCreate){
+    private void setPhoto(ItemEntity itemEntity, ItemCreateDTO itemCreate){
         try{
             MultipartFile coverPhoto = itemCreate.getImage();
             if (coverPhoto != null) {
@@ -122,6 +121,5 @@ public class ItemService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return itemEntity;
     }
 }
