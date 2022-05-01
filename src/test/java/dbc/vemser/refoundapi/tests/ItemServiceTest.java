@@ -40,7 +40,7 @@ public class ItemServiceTest {
     @Mock
     private RefundService refundService;
 
-    private static Integer ID = 2;
+    private static final Integer ID = 2;
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
