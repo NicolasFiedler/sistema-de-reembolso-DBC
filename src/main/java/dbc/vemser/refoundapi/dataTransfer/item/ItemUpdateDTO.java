@@ -1,10 +1,7 @@
 package dbc.vemser.refoundapi.dataTransfer.item;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.DecimalMin;
@@ -16,6 +13,7 @@ import javax.validation.constraints.Size;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ItemUpdateDTO {
     @NotEmpty
     @NotNull
