@@ -56,7 +56,7 @@ public class UserServiceTest {
 
     @Test
     public void deveTestarSeNaoExistirEmailNoBancoUsuarioPodeSerCadastrado() throws Exception {
-        when(userRepository.findByEmail(anyString())).thenReturn(null);
+        when(userRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         when(roleRepository.findById(anyInt())).thenReturn(Optional.of(new RoleEntity()));
         when(userRepository.save(any())).thenReturn(new UserEntity());
 
