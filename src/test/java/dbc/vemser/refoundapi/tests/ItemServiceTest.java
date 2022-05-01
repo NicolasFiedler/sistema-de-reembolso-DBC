@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemUpdateDTO;
 import dbc.vemser.refoundapi.entity.ItemEntity;
-import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.repository.ItemRepository;
 import dbc.vemser.refoundapi.repository.RefundRepository;
 import dbc.vemser.refoundapi.service.ItemService;
-import dbc.vemser.refoundapi.service.RefundService;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +21,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ItemServiceTest {
@@ -36,8 +35,6 @@ public class ItemServiceTest {
 
     @Mock
     private RefundRepository refundRepository;
-
-//TODO - teste de lista
 
     private static final Integer ID = 2;
 

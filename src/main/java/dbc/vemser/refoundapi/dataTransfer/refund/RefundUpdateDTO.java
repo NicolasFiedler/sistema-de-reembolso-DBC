@@ -1,9 +1,6 @@
 package dbc.vemser.refoundapi.dataTransfer.refund;
 
-import dbc.vemser.refoundapi.enums.Status;
 import lombok.*;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter

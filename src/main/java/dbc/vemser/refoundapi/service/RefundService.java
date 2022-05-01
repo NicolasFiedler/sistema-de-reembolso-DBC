@@ -259,10 +259,4 @@ public class RefundService {
         refundRepository.delete(refundFounded);
         return refundDTO;
     }
-
-    public Page<RefundDTO> orderByDate(Integer requestPage, Integer sizePage){
-        Pageable pageable = PageRequest.of(requestPage,sizePage, Sort.by("status").ascending().and(Sort.by("date").descending()));
-        return refundRepository.findAll(pageable)
-                .map(this::prepareDTO);
-    }
 }

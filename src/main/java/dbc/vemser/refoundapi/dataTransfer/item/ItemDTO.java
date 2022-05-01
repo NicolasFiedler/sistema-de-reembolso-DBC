@@ -1,6 +1,5 @@
 package dbc.vemser.refoundapi.dataTransfer.item;
 
-import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import lombok.*;
 
 @Getter

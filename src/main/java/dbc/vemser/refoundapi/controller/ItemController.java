@@ -3,7 +3,6 @@ package dbc.vemser.refoundapi.controller;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemUpdateDTO;
-import dbc.vemser.refoundapi.dataTransfer.user.UserDTO;
 import dbc.vemser.refoundapi.exception.BusinessRuleException;
 import dbc.vemser.refoundapi.service.ItemService;
 import io.swagger.annotations.ApiOperation;

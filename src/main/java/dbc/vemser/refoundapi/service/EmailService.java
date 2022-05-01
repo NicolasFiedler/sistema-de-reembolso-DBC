@@ -2,7 +2,6 @@ package dbc.vemser.refoundapi.service;
 
 
 import dbc.vemser.refoundapi.entity.RefundEntity;
-import dbc.vemser.refoundapi.enums.Status;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import lombok.RequiredArgsConstructor;

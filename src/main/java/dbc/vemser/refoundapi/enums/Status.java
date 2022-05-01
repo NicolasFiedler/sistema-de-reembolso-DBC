@@ -2,7 +2,6 @@ package dbc.vemser.refoundapi.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
 

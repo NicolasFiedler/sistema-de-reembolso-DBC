@@ -1,15 +1,9 @@
 package dbc.vemser.refoundapi.dataTransfer.refund;
 
-import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
-import dbc.vemser.refoundapi.entity.ItemEntity;
-import dbc.vemser.refoundapi.enums.Status;
 import lombok.*;
 
-import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor

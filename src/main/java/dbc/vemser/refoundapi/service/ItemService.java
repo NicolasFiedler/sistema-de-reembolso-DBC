@@ -1,6 +1,5 @@
 package dbc.vemser.refoundapi.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemCreateDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemDTO;
 import dbc.vemser.refoundapi.dataTransfer.item.ItemUpdateDTO;
@@ -33,8 +32,6 @@ public class ItemService {
 
     @Autowired
     private RefundService refundService;
-
-    private final ObjectMapper objectMapper;
 
     private final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 

@@ -1,15 +1,12 @@
 package dbc.vemser.refoundapi.dataTransfer.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import dbc.vemser.refoundapi.entity.RoleEntity;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Set;
 
 @NoArgsConstructor
 @AllArgsConstructor
