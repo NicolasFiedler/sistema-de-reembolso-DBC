@@ -13,6 +13,8 @@ import java.util.Optional;
 public interface RefundRepository extends JpaRepository<RefundEntity, Integer> {
     Page<RefundEntity> findByStatus (Status status, Pageable pageable);
 
+    Page<RefundEntity> findByIdUser (Integer id, Pageable pageable);
+
     Optional<RefundEntity> findByIdRefundAndIdUserAndStatus(Integer idRefund, Integer idUser, Status aberto);
 
 }

@@ -62,12 +62,12 @@ public class RefundService {
 
         RefundEntity refundCreated = refundRepository.save(refundEntity);
 
-        emailService.sendEmail(u.getEmail(), refundCreated);
-        List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(3);
-        for (UserEntity user : userEntityList) {
-            emailService.sendEmail(user.getEmail(), refundCreated);
-            log.info("Email Enviado para gestor");
-        }
+//        emailService.sendEmail(u.getEmail(), refundCreated);
+//        List<UserEntity> userEntityList = userRepository.findByRoleEntities_IdRole(3);
+//        for (UserEntity user : userEntityList) {
+//            emailService.sendEmail(user.getEmail(), refundCreated);
+//            log.info("Email Enviado para gestor");
+//        }
 
 //        new Thread(new Runnable(){
 //            @Override
@@ -134,10 +134,8 @@ public class RefundService {
             case 3 -> refundRepository.findByStatus(Status.ABERTO, pageable)
                     .map(this::prepareDTO);
 
-            case 4 -> new PageImpl<> (userEntity.getRefundEntities().stream()
-                    .map(this::prepareDTO)
-                    .collect(Collectors.toList()), pageable, userEntity.getRefundEntities().stream()
-                        .map(this::prepareDTO).toList().size());
+            case 4 -> refundRepository.findByIdUser(userEntity.getIdUser(), pageable)
+                    .map(this::prepareDTO);
 
             default -> null;
         };

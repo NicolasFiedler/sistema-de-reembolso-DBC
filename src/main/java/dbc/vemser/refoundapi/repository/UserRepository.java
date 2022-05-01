@@ -1,5 +1,6 @@
 package dbc.vemser.refoundapi.repository;
 
+import dbc.vemser.refoundapi.entity.RefundEntity;
 import dbc.vemser.refoundapi.entity.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
